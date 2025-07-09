@@ -1,0 +1,28 @@
+.dashboard-container {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.dashboard-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.dashboard-controls input,
+.dashboard-controls select {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: center;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  border: 1px solid #ccc
+}

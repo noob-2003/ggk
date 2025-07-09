@@ -1,0 +1,210 @@
+/* 기본 테이블 스타일 (데스크탑) */
+.flight-table-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.filter-controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.table-wrapper {
+  width: 100%;
+}
+
+.flight-table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ccc;
+  table-layout: fixed; /* 고정 레이아웃으로 설정 */
+}
+
+/* 입력 필드 스타일 */
+.flight-table input[type="text"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 0.85em;
+  resize: none;
+  overflow: hidden;
+}
+
+.flight-table th,
+.flight-table td {
+  border: 1px solid #ccc;
+  padding: 8px 6px;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  vertical-align: top;
+}
+
+.flight-table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.flight-table td {
+  word-break: keep-all;
+  font-size: 0.85em;
+}
+
+.flight-table .center-align {
+  text-align: center;
+}
+
+.flight-table .nowrap-cell {
+  white-space: nowrap;
+}
+
+/* 테이블 컬럼 너비 비율 설정 (769px 이상에서만 적용) */
+@media screen and (min-width: 769px) {
+  .flight-table th:nth-child(1),
+  .flight-table td:nth-child(1) {
+    width: 4%; /* ID */
+  }
+  
+  .flight-table th:nth-child(2),
+  .flight-table td:nth-child(2) {
+    width: 10%; /* 비행편명 */
+  }
+  
+  .flight-table th:nth-child(3),
+  .flight-table td:nth-child(3) {
+    width: 12%; /* 목적지 */
+  }
+  
+  .flight-table th:nth-child(4),
+  .flight-table td:nth-child(4) {
+    width: 10%; /* 기종 */
+  }
+  
+  .flight-table th:nth-child(5),
+  .flight-table td:nth-child(5) {
+    width: 10%; /* 출발날짜 */
+  }
+  
+  .flight-table th:nth-child(6),
+  .flight-table td:nth-child(6) {
+    width: 8%; /* 출발시간 */
+  }
+  
+  .flight-table th:nth-child(7),
+  .flight-table td:nth-child(7) {
+    width: 8%; /* 작업시작 */
+  }
+  
+  .flight-table th:nth-child(8),
+  .flight-table td:nth-child(8) {
+    width: 8%; /* 준비시간 */
+  }
+  
+  .flight-table th:nth-child(9),
+  .flight-table td:nth-child(9) {
+    width: 8%; /* 작업종료 */
+  }
+  
+  .flight-table th:nth-child(10),
+  .flight-table td:nth-child(10) {
+    width: 6%; /* 완료 */
+  }
+  
+  .flight-table th:nth-child(11),
+  .flight-table td:nth-child(11) {
+    width: 12%; /* 주석 */
+    white-space: normal;
+  }
+  
+  .flight-table th:nth-child(12),
+  .flight-table td:nth-child(12) {
+    width: 8%; /* 완료일자 */
+  }
+  
+  .flight-table th:nth-child(13),
+  .flight-table td:nth-child(13) {
+    width: 8%; /* 완료시간 */
+  }
+}
+
+/* --- 반응형 스타일 (모바일/태블릿) --- */
+@media screen and (max-width: 768px) {
+  .table-wrapper {
+    overflow-x: hidden;
+  }
+
+  .flight-table {
+    table-layout: auto;
+  }
+
+  .flight-table thead {
+    display: none;
+  }
+
+  .flight-table,
+  .flight-table tbody,
+  .flight-table tr,
+  .flight-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .flight-table tr {
+    /* 각 행을 카드처럼 보이게 */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .flight-table td {
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 12px 10px;
+    padding-left: 50%; 
+    position: relative;
+    text-align: right;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 0.9em;
+  }
+
+  .flight-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .flight-table .center-align {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .flight-table .center-align::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+}

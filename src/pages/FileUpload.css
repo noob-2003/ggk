@@ -1,0 +1,120 @@
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* 전체 컨테이너 */
+.upload-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 2.2em;
+    color: black;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* 파일 드롭 존 */
+.drop-zone {
+    border: 2px dashed gray;
+    border-radius: 8px;
+    padding: 40px 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.drop-zone p {
+    margin: 0;
+    font-size: 1.1em;
+    color: #585e63;
+}
+
+/* browse 링크 */
+.browse-link {
+    color: blue;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 4px;
+}
+
+/* 드래그 중일 때 드롭 존 스타일 변경 */
+.drop-zone.dragover {
+    background-color: #f0f4ff;
+    border-color: #4a69ff;
+}
+
+/* 파일 목록 컨테이너 */
+.file-list-container {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+.file-list-container h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #343a40;
+}
+
+.file-list-item {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #343a40;
+    word-break: break-all;
+}
+
+.file-list-item span {
+  margin-right: 10px; /* 파일 이름과 버튼 사이 간격 */
+}
+
+/* 파일 삭제 버튼 */
+.remove-file-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.5em;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.remove-file-btn:hover {
+  color: #333;
+}
+
+/* 제출 버튼 */
+.submit-btn {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.5s ease;
+}
+
+.submit-btn:hover {
+    background-color: #212224;
+}

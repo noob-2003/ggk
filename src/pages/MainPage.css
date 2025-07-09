@@ -1,0 +1,130 @@
+/* 전체 컨테이너 */
+.landing-container {
+  padding: 2rem;
+  font-family: sans-serif;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 메인 헤더 (제목) */
+.main-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* 부서 페이지 섹션 */
+.department-sections {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* 개별 부서 칼럼 */
+.department-column {
+  flex: 1 1 250px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.department-column h2 {
+  font-size: 1.3rem;
+  color: #555;
+  margin-bottom: 1rem;
+  word-break: keep-all; 
+}
+
+/* 부서 버튼 */
+.department-button, .admin-button {
+  width: 100%;
+  max-width: 250px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-align: center;
+  display: block;
+}
+
+.department-button:hover, .admin-button:hover {
+  background-color: #d0d0d0;
+  transform: translateY(-2px);
+}
+
+.department-button:active, .admin-button:active {
+  background-color: #c0c0c0;
+  transform: translateY(0);
+}
+
+/* 구분선 */
+.separator {
+  width: 80%;
+  max-width: 600px;
+  margin: 3rem auto;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+/* 관리자 섹션 */
+.admin-section {
+  margin-top: 2rem;
+}
+
+.admin-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.admin-section .admin-button {
+  margin: 0 1rem;
+}
+
+.admin-buttons-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* --- 반응형 디자인 --- */
+/* Tablet (iPad) layout - 768px and up */
+@media (min-width: 768px) {
+  .department-sections {
+    justify-content: center;
+    gap: 3rem;
+  }
+}
+
+/* PC layout - 1024px and up */
+@media (min-width: 1024px) {
+  .department-sections {
+    justify-content: center;
+    gap: 4rem;
+  }
+}
+
+/* under 480px */
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 2rem;
+  }
+  
+  .department-column {
+    min-width: 0;
+    padding: 1rem;
+  }
+}
