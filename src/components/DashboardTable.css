@@ -18,11 +18,30 @@
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: auto;
+  line-height: 1.2;
   font-size: 14px;
   text-align: center;
 }
 
 .dashboard-table th,
 .dashboard-table td {
-  border: 1px solid #ccc
+  border: 1px solid #ccc;
+  padding: 4px 6px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  
+}
+
+.cell-complete {
+  background-color: #c8f7c5; 
+  color: #2e7d32;            
+  font-weight: bold;
+}
+
+.cell-incomplete {
+  background-color: #ffcdd2; 
+  color: #c62828;            
+  font-weight: bold;
 }

@@ -33,9 +33,9 @@ const MainPage = () => {
       <div className="admin-section">
         <h2>관리자 화면</h2>
         <div className="admin-buttons-container">
-          <button className="admin-button" onClick={() => navigate('/dashboard')}>대시보드 게시판형</button>
+          <button className="admin-button" onClick={() => navigate('/admin-login')}>대시보드 게시판형</button>
           <button className="admin-button" onClick={() => navigate('/admin-login')}>대시보드 UI형</button>
-          <button className="admin-button" onClick={() => navigate('file-upload')}>CSV Upload</button>
+          <button className="admin-button" onClick={() => navigate('/admin-login')}>CSV Upload</button>
         </div>
       </div>
     </div>

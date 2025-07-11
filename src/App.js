@@ -1,4 +1,5 @@
-import React from 'react';
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';          // 랜딩 페이지
 import PickAndPack1 from './pages/PickAndPack1';  // 부서 페이지
@@ -14,11 +15,15 @@ import AdminLogin from './pages/AdminLogin';
 import FileUpload from './pages/FileUpload';
 
 function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   return (
     <Router>
         <Routes>
         <Route path="/" element={<MainPage />} />
-        
+        <Route path="/admin-login" element={<AdminLogin onLogin={() => setIsAuthenticated(true)}/>} />
+        <Route Path="/dashboard" element={isAuthenticated ? <DashboardPage /> : <Navigate to="/admin-login" replace />}/>
+
         <Route path="/make-pack1" element={<MakeAndPack1 />} />
         <Route path="/make-pack2" element={<MakeAndPack2 />} />
         <Route path="/make-pack3" element={<MakeAndPack3 />} />
@@ -29,10 +34,8 @@ function App() {
 
         <Route path="/wash-pack1" element={<WashAndPack1 />} />
         <Route path="/wash-pack2" element={<WashAndPack2 />} />
-
+        
         <Route path="/dashboard" element={<DashboardPage />} />
-
-        <Route path="/admin-login" element={<AdminLogin />} />
 
         <Route path="/file-upload" element={<FileUpload />} />
         </Routes>

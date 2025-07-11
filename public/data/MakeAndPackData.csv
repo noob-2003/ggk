@@ -1,7 +1,0 @@
-﻿id,flight,destination,aircraft,departureDate,departureTime,startTime,preDays,endTime,completed,note,completeDate,completeTime
-1,OZ 9999,프랑크푸르트,OZA333E,2025-06-10,15:45,8:00,-1,10:00,N,,,
-2,VS 4918,시카고,VSB505E,2025-06-10,15:50,8:00,-1,10:00,N,,,
-3,OZ 202,오버코헨,OZ020EE,2025-06-10,15:50,8:00,-1,10:00,N,,,
-4,OZ 331,뉴옥,OZ 331ZZ,2025-06-10,15:45,8:00,-1,10:00,N,,,
-5,OZ 333,워싱턴DC,OZ 333FF,2025-06-10,15:50,8:00,-1,10:00,N,,,
-6,OZ 202,코나키나발루,OZ 202HH,2025-06-10,15:50,8:00,-1,10:00,N,,,

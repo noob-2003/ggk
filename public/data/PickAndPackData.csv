@@ -1,3 +1,0 @@
-﻿id,flight,destination,aircraft,departureDate,departureTime,startTime,preDays,endTime,completed,note,completeDate,completeTime
-1,OZ 1234,요하네스버그,OZA333E,2025-06-10,15:50,8:00,-1,10:00,Y,다음담당자에게인계합니다,2025-06-10,9:00
-2,OZ 5678,시드니,OZA777E,2025-06-11,9:30,9:00,-1,11:30,N,,,
