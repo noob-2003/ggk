@@ -10,7 +10,8 @@ const AdminLogin = ({ onLogin }) => {
     if (password === '1234') {
       onLogin();
       navigate('/Dashboard');
-    } else {
+    }
+    else {
     alert('비밀번호가 틀렸습니다');
     }
   };

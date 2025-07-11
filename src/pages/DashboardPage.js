@@ -1,4 +1,3 @@
-import React from 'react';
 import DashboardTable from '../components/DashboardTable';
 
 import { makeAndPack1Data } from './MakeAndPack1';

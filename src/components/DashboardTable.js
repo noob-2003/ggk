@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './DashboardTable.css';
 
 const DashboardTable = ({ data }) => {

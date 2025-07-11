@@ -1,4 +1,3 @@
-import React from 'react';
 import FlightTable from '../components/FlightTable';
 
 export const washAndPack2Data = [
