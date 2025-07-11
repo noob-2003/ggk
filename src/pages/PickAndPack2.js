@@ -3,8 +3,6 @@ import FlightTable from '../components/FlightTable';
 export const pickAndPack2Data = [
   {
     id: 1,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 1234',
     destination: '요하네스버그',
     aircraft: 'OZA333E',
@@ -20,8 +18,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 2,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 5678',
     destination: '시드니',
     aircraft: 'OZA777E',
@@ -37,8 +33,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 3,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 9101',
     destination: '프랑크푸르트',
     aircraft: 'OZA388E',
@@ -54,8 +48,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 4,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 1122',
     destination: '로스앤젤레스',
     aircraft: 'OZA350E',
@@ -71,8 +63,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 5,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 3344',
     destination: '홍콩',
     aircraft: 'OZA321E',
@@ -88,8 +78,6 @@ export const pickAndPack2Data = [
   },
 {
     id: 6,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 7788',
     destination: '방콕',
     aircraft: 'OZA330E',
@@ -105,8 +93,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 7,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 9900',
     destination: '런던',
     aircraft: 'OZA777E',
@@ -122,8 +108,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 8,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 2468',
     destination: '도쿄',
     aircraft: 'OZA321E',
@@ -139,8 +123,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 9,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 1357',
     destination: '싱가포르',
     aircraft: 'OZA350E',
@@ -156,8 +138,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 10,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 8642',
     destination: '뉴욕',
     aircraft: 'OZA388E',
@@ -173,8 +153,6 @@ export const pickAndPack2Data = [
   },
   {
     id: 11,
-    department: 'PNP',
-    formNumber: 2,
     flight: 'OZ 1111',
     destination: '파리',
     aircraft: 'OZA350E',

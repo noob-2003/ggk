@@ -3,8 +3,6 @@ import FlightTable from '../components/FlightTable';
 export const washAndPack1Data = [
     {
         id: 1,
-        department: 'WNP',
-        formNumber: 1,
         flight: 'VS 1231',
         destination: '취리히',
         aircraft: 'VSB505E',

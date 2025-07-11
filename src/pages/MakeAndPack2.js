@@ -3,8 +3,6 @@ import FlightTable from '../components/FlightTable';
 export const makeAndPack2Data = [
     {
         id: 1,
-        department: 'MNP',
-        formNumber: 2,
         flight: 'OZ 9999',
         destination: '프랑크푸르트',
         aircraft: 'OZA333E',
@@ -30,8 +28,6 @@ export const makeAndPack2Data = [
     },
     {
         id: 2,
-        department: 'MNP',
-        formNumber: 2,
         flight: 'VS 4918',
         destination: '시카고',
         aircraft: 'VSB505E',
@@ -47,8 +43,6 @@ export const makeAndPack2Data = [
     },
     {
         id: 3,
-        department: 'MNP',
-        formNumber: 2,
         flight: 'OZ 202',
         destination: '오버코헨',
         aircraft: 'OZ020EE',
@@ -64,8 +58,6 @@ export const makeAndPack2Data = [
     },
     {
         id: 4,
-        department: 'MNP',
-        formNumber: 2,
         flight: 'OZ 331',
         destination: '뉴옥',
         aircraft: 'OZ 331ZZ',
@@ -81,8 +73,6 @@ export const makeAndPack2Data = [
     },
     {
         id: 5,
-        department: 'MNP',
-        formNumber: 2,
         flight: 'OZ 333',
         destination: '워싱턴DC',
         aircraft: 'OZ 333FF',
@@ -98,8 +88,6 @@ export const makeAndPack2Data = [
     },
     {
         id: 6,
-        department: 'MNP',
-        formNumber: 2,
         flight: 'OZ 202',
         destination: '코나키나발루',
         aircraft: 'OZ 202HH',

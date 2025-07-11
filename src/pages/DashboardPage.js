@@ -48,8 +48,6 @@ const DashboardPage = () => {
    
     return {
       id: idx + 1,
-      department: sample.department || '',
-      formNumber: sample.formNumber || '',
       flight,
       destination: sample.destination || '',
       aircraft: sample.aircraft || '',
@@ -65,9 +63,8 @@ const DashboardPage = () => {
 
   return (
     <div>
-    <h1>대시보드 페이지</h1>
     <DashboardTable data={data} />
-  </div> 
+    </div>
   );
 };
 
