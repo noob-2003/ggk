@@ -4,8 +4,7 @@ import {
   PieChart,
   Pie,
   Cell,
-  Tooltip,
-  Legend,
+  //  Legend,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -25,6 +24,7 @@ import { washAndPack2Data } from "./WashAndPack2";
 
 const COLORS = ["#4caf50", "#f44336"];
 
+// 완료/미완료 카운트
 const countStatus = (arr) => {
   let completed = 0;
   let notCompleted = 0;
@@ -35,32 +35,66 @@ const countStatus = (arr) => {
   return { completed, notCompleted };
 };
 
+// PieChart 안전 렌더링
 const renderPie = (data) => {
   const safeData = data || [];
   const hasData = safeData.some(d => d.value > 0);
 
   return (
-    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <div style={{ width: "100%", textAlign: "center" }}>
       {hasData ? (
-        <ResponsiveContainer width="95%" height={300}>
-          <PieChart>
-            <Pie
-              data={safeData}
-              cx="50%"
-              cy="50%"
-              outerRadius="45%"
-              dataKey="value"
-              label
-              labelLine={false}
-            >
-              {safeData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend verticalAlign="bottom" height={40} />
-          </PieChart>
-        </ResponsiveContainer>
+        <>
+          {/* 원 그래프 */}
+          <ResponsiveContainer width="95%" height={300}>
+            <PieChart>
+              <Pie
+                data={safeData}
+                cx="50%"
+                cy="50%"
+                outerRadius="45%"
+                dataKey="value"
+                label={({ value }) => {
+                  const total = safeData.reduce((sum, entry) => sum + entry.value, 0);
+                  const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${percent}%`;
+                }}
+                labelLine={false}
+                stroke="none"
+                strokeWidth={0}
+                isAnimationActive={false}
+                startAngle={90}
+                endAngle={-270}
+              >
+                {safeData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* 수치 + 범례 중앙 정렬 */}
+          <div style={{ display: "flex", justifyContent: "center", gap: "80px", marginTop: "20px" }}>
+            {/* ✅ 미완료 */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <span style={{ color: "#f44336", fontWeight: "bold", fontSize: "18px" }}>
+                {safeData[1].value}건
+              </span>
+              <span style={{ color: "#f44336", fontWeight: "bold" }}>
+                ■ 미완료
+              </span>
+            </div>
+
+            {/* 완료 */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <span style={{ color: "#4caf50", fontWeight: "bold", fontSize: "18px" }}>
+                {safeData[0].value}건
+              </span>
+              <span style={{ color: "#4caf50", fontWeight: "bold" }}>
+                ■ 완료
+              </span>
+            </div>
+          </div>
+        </>
       ) : (
         <div
           style={{
@@ -79,25 +113,49 @@ const renderPie = (data) => {
   );
 };
 
-// ✅ BarChart 안전 렌더링 (데이터 없으면 메시지)
+
+
+
+// BarChart 안전 렌더링
 const renderBar = (data) => {
   const safeData = data || [];
   const hasData = safeData.some(d => (d.완료 > 0 || d.미완료 > 0));
 
   return (
-    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <div style={{ width: "100%", textAlign: "center" }}>
       {hasData ? (
-        <ResponsiveContainer width="95%" height={300}>
-          <BarChart data={safeData} barSize={30}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend verticalAlign="bottom" height={36} />
-            <Bar dataKey="완료" fill="#4caf50" />
-            <Bar dataKey="미완료" fill="#f44336" />
-          </BarChart>
-        </ResponsiveContainer>
+        <>
+          {/* 막대그래프 */}
+          <ResponsiveContainer width="95%" height={300}>
+            <BarChart data={safeData} barSize={30} barGap={50}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" tick={false}/>
+              <YAxis />
+              <Bar dataKey="완료" fill="#4caf50" />
+              <Bar dataKey="미완료" fill="#f44336" />
+            </BarChart>
+          </ResponsiveContainer>
+
+          {/* 수치 + 범례 중앙 정렬 */}
+          <div style={{ display: "flex", justifyContent: "center", gap: "80px", marginTop: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <span style={{ color: "#f44336", fontWeight: "bold", fontSize: "18px" }}>
+                {safeData[0].미완료}건
+              </span>
+              <span style={{ color: "#f44336", fontWeight: "bold" }}>
+                ■ 미완료
+              </span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <span style={{ color: "#4caf50", fontWeight: "bold", fontSize: "18px" }}>
+                {safeData[0].완료}건
+              </span>
+              <span style={{ color: "#4caf50", fontWeight: "bold" }}>
+                ■ 완료
+              </span>
+            </div>
+          </div>
+        </>
       ) : (
         <div
           style={{
@@ -116,8 +174,9 @@ const renderBar = (data) => {
   );
 };
 
+
 function DashboardUI() {
-  // ✅ 부서별 카운트
+  // 부서별 카운트
   const makeCount = useMemo(() => countStatus([
     ...makeAndPack1Data,
     ...makeAndPack2Data,
@@ -135,7 +194,7 @@ function DashboardUI() {
     ...washAndPack2Data
   ]), []);
 
-  // ✅ 그래프 데이터 생성
+  // 그래프 데이터 생성
   const makePie = [
     { name: "완료", value: makeCount.completed },
     { name: "미완료", value: makeCount.notCompleted }
@@ -158,7 +217,7 @@ function DashboardUI() {
       <h1>✅ 부서별 완료 현황</h1>
 
       <div className="department-container">
-        {/* ✅ Make & Pack */}
+        {/* Make & Pack */}
         <div className="department-card">
           <h2>Make & Pack</h2>
           <div className="chart-wrap">
@@ -167,7 +226,7 @@ function DashboardUI() {
           </div>
         </div>
 
-        {/* ✅ Pick & Pack */}
+        {/* Pick & Pack */}
         <div className="department-card">
           <h2>Pick & Pack</h2>
           <div className="chart-wrap">
@@ -176,7 +235,7 @@ function DashboardUI() {
           </div>
         </div>
 
-        {/* ✅ Wash & Pack */}
+        {/* Wash & Pack */}
         <div className="department-card">
           <h2>Wash & Pack</h2>
           <div className="chart-wrap">
