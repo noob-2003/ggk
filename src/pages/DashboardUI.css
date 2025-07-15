@@ -1,0 +1,72 @@
+.dashboard-ui-container {
+  padding: 40px;
+  background-color: #f5f6fa;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.dashboard-ui-container h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  color: #333;
+}
+
+/* ✅ 부서별 큰 카드 컨테이너 (반응형) */
+.department-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ✅ 태블릿 이상 → 2열 */
+@media (min-width: 1024px) {
+  .department-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ✅ 데스크탑 넓은 화면 → 3열 */
+@media (min-width: 1440px) {
+  .department-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ✅ 부서별 카드 */
+.department-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 520px;
+  overflow: hidden; /* ✅ 혹시라도 넘치는 요소 숨김 */
+}
+
+/* ✅ 부서 이름 */
+.department-card h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #222;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+/* ✅ 그래프 영역 */
+.chart-wrap {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Pie와 Bar 사이 간격 */
+}
