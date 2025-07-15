@@ -1,27 +1,36 @@
 .dashboard-container {
+  max-width: 100%;
+  margin: 0 auto;
   padding: 20px;
-  overflow-x: auto;
 }
 
 .dashboard-controls {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
+  flex-wrap: wrap;
 }
 
 .dashboard-controls input,
 .dashboard-controls select {
   padding: 6px 10px;
   font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: auto;
+  table-layout: fixed;
   line-height: 1.2;
   font-size: 14px;
-  text-align: center;
+  border: 1px solid #ccc;
 }
 
 .dashboard-table th,
@@ -31,9 +40,21 @@
   text-align: center;
   vertical-align: middle;
   white-space: normal;
-  
+  overflow: visible;
+  text-overflow: break-word;
 }
 
+.dashboard-table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.dashboard-table td {
+  font-size: 0.85em;
+}
+
+/* 완료/미완료 상태 */
 .cell-complete {
   background-color: #c8f7c5; 
   color: #2e7d32;            
@@ -44,4 +65,131 @@
   background-color: #ffcdd2; 
   color: #c62828;            
   font-weight: bold;
+}
+
+@media screen and (max-width: 769px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+
+  .table-wrapper {
+    overflow-x: hidden;
+  }
+
+  .dashboard-table {
+    table-layout: auto;
+  }
+
+  .dashboard-table thead {
+    display: none;
+  }
+
+  .dashboard-table,
+  .dashboard-table tbody,
+  .dashboard-table tr,
+  .dashboard-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-table tr {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 0;
+  }
+
+  .dashboard-table td {
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    padding-left: 50%;
+    position: relative;
+    text-align: right;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 0.9em;
+  }
+
+  .dashboard-table td:last-child {
+    border-bottom: none;
+  }
+
+  .dashboard-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.85em;
+  }
+
+  .dashboard-table .task-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: flex-end;
+    padding-top: 5px;
+  }
+
+  .dashboard-table .task-item {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    min-width: 35px;
+    text-align: center;
+  }
+
+  .dashboard-table .task-item.complete {
+    background-color: #c8f7c5;
+    color: green;
+  }
+
+  .dashboard-table .task-item.incomplete {
+    background-color: #ffcdd2;
+    color: red;
+  }
+
+  .dashboard-table .cell-complete,
+  .dashboard-table .cell-incomplete,
+  .dashboard-table .delay-none,
+  .dashboard-table .delay-low,
+  .dashboard-table .delay-medium,
+  .dashboard-table .delay-high {
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+
+  .dashboard-table .cell-complete::before,
+  .dashboard-table .cell-incomplete::before,
+  .dashboard-table .delay-none::before,
+  .dashboard-table .delay-low::before,
+  .dashboard-table .delay-medium::before,
+  .dashboard-table .delay-high::before {
+    left: 10px;
+    width: calc(50% - 20px);
+  }
+
+  .dashboard-table td::before {
+  content: attr(data-label);
+  position: absolute;
+  left: 10px;
+  width: calc(50% - 20px);
+  padding-right: 10px;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: bold;
+  font-size: 0.85em;
+  }
+
 }

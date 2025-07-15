@@ -25,6 +25,23 @@ const DashboardTable = ({ data }) => {
     return flightMatch && statusMatch;
   });
 
+  // 작업 상태를 그룹으로 렌더링
+  const renderTaskGroup = (tasks) => {
+    return (
+      <div className="task-group">
+        {taskKeys.map((key) => {
+          const status = tasks?.[key] ?? 'Y';
+          const className = status === 'Y' ? 'task-item complete' : 'task-item incomplete';
+          return (
+            <span key={key} className={className}>
+              {key.toUpperCase()}: {status}
+            </span>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="dashboard-container">
       <h2>상세 대시보드</h2>
@@ -78,20 +95,20 @@ const DashboardTable = ({ data }) => {
 
               return (
                 <tr key={idx}>
-                  <td>{idx + 1}</td>
-                  <td>{item.flight}</td>
-                  <td>{item.destination}</td>
-                  <td>{item.aircraft}</td>
+                  <td data-label="ID">{idx + 1}</td>
+                  <td data-label="비행편명">{item.flight}</td>
+                  <td data-label="목적지">{item.destination}</td>
+                  <td data-label="기종">{item.aircraft}</td>
                   {taskKeys.map((key) => (
-                    <td key={key}>{item.tasks?.[key] ?? 'Y'}</td>
+                    <td data-label={key.toUpperCase()} key={key}>{item.tasks?.[key] ?? 'Y'}</td>
                   ))}
-                  <td className={statusClass}>{overallStatus}</td>
-                  <td className={delayClass}>{delay}분</td>
-                  <td>{item.departureDate}</td>
-                  <td>{item.startTime}</td>
-                  <td>{item.endTime}</td>
-                  <td>{item.completeDate}</td>
-                  <td>{item.completeTime}</td>
+                  <td data-label="완료 여부" className={statusClass}>{overallStatus}</td>
+                  <td data-label="지연시간" className={delayClass}>{delay}분</td>
+                  <td data-label="출발일">{item.departureDate}</td>
+                  <td data-label="작업시간">{item.startTime}</td>
+                  <td data-label="작업종료">{item.endTime}</td>
+                  <td data-label="완료일">{item.completeDate}</td>
+                  <td data-label="완료시간">{item.completeTime}</td>
                 </tr>
               );
             })}
