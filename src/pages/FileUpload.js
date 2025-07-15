@@ -2,73 +2,71 @@ import React, { useState, useRef } from 'react';
 import './FileUpload.css';
 
 function FileUpload() {
-  // 선택된 파일 목록 (배열)
   const [selectedFiles, setSelectedFiles] = useState([]);
-  // 드래그 앤 드랍 시 UI 변경용 (boolean)
   const [isDragOver, setIsDragOver] = useState(false);
-  // 숨긴 <input type="file">에 접근하기 위한 참조
+  const [successMessage, setSuccessMessage] = useState(""); // 성공 메시지 상태 추가
+
   const fileInputRef = useRef(null);
 
-  // 파일 누적 및 중복 방지
   const handleIncomingFiles = (incomingFiles) => {
     setSelectedFiles(prevFiles => {
       const newFiles = Array.from(incomingFiles);
 
-      // 중복되지 않는 파일만 필터링
       const uniqueNewFiles = newFiles.filter(
         newFile => !prevFiles.some(
           prevFile => prevFile.name === newFile.name && prevFile.size === newFile.size
         )
       );
 
-      // 중복되지 않은 새 파일들 추가해 반환
       return [...prevFiles, ...uniqueNewFiles];
     });
   };
 
-  // browse 클릭
   const handleBrowseClick = () => {
     fileInputRef.current.click();
   };
 
-  // 파일 탐색기에서 파일 선택
   const handleFileChange = (event) => {
     if (event.target.files.length) {
       handleIncomingFiles(event.target.files);
-      
       event.target.value = '';
     }
   };
 
-  // 드래그 앤 드랍 이벤트 핸들러
   const handleDragEnter = (e) => { e.preventDefault(); setIsDragOver(true); };
   const handleDragOver = (e) => { e.preventDefault(); setIsDragOver(true); };
   const handleDragLeave = (e) => { e.preventDefault(); setIsDragOver(false); };
-  const handleDrop = (e) => { // 드랍 시 파일 받아서 추가
+  const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
     handleIncomingFiles(e.dataTransfer.files);
   };
 
-  // 특정 파일 제거
   const handleRemoveFile = (fileToRemove) => {
     setSelectedFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
   };
 
-  // 제출 버튼 클릭
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (selectedFiles.length === 0) {
-      alert("업로드할 파일을 먼저 선택해 주세요.");
-      return;
-    }
+  const handleUpload = async () => {
+  try {
     const formData = new FormData();
-    selectedFiles.forEach(file => {
-      formData.append('files', file);
+    selectedFiles.forEach(file => formData.append("file", file)); // 파일 추가
+
+    const response = await fetch("http://211.42.159.18:8080/api/csv/upload", {
+      method: "POST",
+      body: formData,
     });
-    
-    // 실제 서버 전송 로직...
-  };
+
+    if (response.ok) {
+      setSuccessMessage("업로드 성공 ✅");
+    } else {
+      setSuccessMessage("업로드 실패 ❌");
+    }
+  } catch (error) {
+    console.error("업로드 중 오류 발생:", error);
+    setSuccessMessage("서버 오류 ❌");
+  }
+};
+
 
   return (
     <div className="upload-container">
@@ -115,9 +113,16 @@ function FileUpload() {
         </div>
       )}
 
-      <button type="button" className="submit-btn" onClick={handleSubmit}>
+      <button type="button" className="submit-btn" onClick={handleUpload}>
         Submit
       </button>
+
+      {/* 업로드 성공 메시지 표시 */}
+      {successMessage && (
+        <div style={{ marginTop: "20px", color: "green", fontWeight: "bold" }}>
+          {successMessage}
+        </div>
+      )}
     </div>
   );
 }
