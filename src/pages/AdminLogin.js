@@ -12,10 +12,10 @@ const AdminLogin = ({ onLogin }) => {
   const searchParams = new URLSearchParams(location.search);
   const redirectPath = searchParams.get('redirect') || '/dashboard';
 
-   const handleLogin = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://211.42.159.18:8080/api/admin/login', {
+      const response = await fetch('http://localhost:8080/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -33,9 +33,9 @@ const AdminLogin = ({ onLogin }) => {
       }
     } catch (error) {
       alert('서버 연결 실패 또는 오류 발생');
-      console.error('로그인 오류:', error); // ','로 구분
+      console.error('로그인 오류:', error);
     } finally {
-      setLoading(false); // L 소문자
+      setLoading(false);
     }
   };
 
@@ -43,7 +43,15 @@ const AdminLogin = ({ onLogin }) => {
     <div className="login-container">
       <div className="login-wrapper">
         <h2 className="login-title">관리자 로그인</h2>
-        <div className="login-box">
+
+        {/* form 태그 추가 + 엔터 지원 */}
+        <form
+          className="login-box"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <input
             type="password"
             placeholder="Password"
@@ -52,8 +60,16 @@ const AdminLogin = ({ onLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
           />
-          <button className="login-button" onClick={handleLogin} disabled={loading}>Log in</button>
-        </div>
+
+          {/* password 값이 있으면 active 클래스 추가 */}
+          <button
+            type="submit"
+            className={`login-button ${password ? 'active' : ''}`}
+            disabled={loading}
+          >
+            Log in
+          </button>
+        </form>
       </div>
     </div>
   );
