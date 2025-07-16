@@ -34,11 +34,11 @@ function App() {
 
         <Route path="/admin-login" element={<AdminLogin onLogin={() => setIsAuthenticated(true)}/>} />
           
-        {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
-        <Route path="/dashboard" element={isAuthenticated ? <DashboardPage /> : <Navigate to="/admin-login" replace />}/>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        {/* <Route path="/dashboard" element={isAuthenticated ? <DashboardPage /> : <Navigate to="/admin-login" replace />}/> */}
 
-        {/* <Route path="/dashboardUI" element={<DashboardUI />} /> */}
-        <Route path="/dashboardUI" element={isAuthenticated ? <DashboardUI /> : <Navigate to="/admin-login" replace />}/>
+        <Route path="/dashboardUI" element={<DashboardUI />} />
+        {/* <Route path="/dashboardUI" element={isAuthenticated ? <DashboardUI /> : <Navigate to="/admin-login" replace />}/> */}
 
         {/* <Route path="/file-upload" element={<FileUpload />} /> */}
         <Route path="/file-upload" element={isAuthenticated ? <FileUpload /> : <Navigate to="/admin-login" replace />}/>
