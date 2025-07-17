@@ -2,32 +2,27 @@ import React, { useState } from 'react';
 import './DashboardTable.css';
 
 const DashboardTable = ({ data }) => {
-  // 비행편명 검색용
   const [searchTerm, setSearchTerm] = useState('');
-  // 완료/미완료/전체 중 선택된 상태
   const [statusFilter, setStatusFilter] = useState('all');
-  // 정렬할 항목과 방향
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-  // 작업 키 정의
+  // ✅ 작업 키 정의
   const completeKeys = [
     'bool_complete1',
     'bool_complete2',
     'bool_complete3',
-    'bool_complete4',
     'bool_complete5',
     'bool_complete6',
     'bool_complete7',
     'bool_complete8'
   ];
 
-  // 완료 여부 계산
+  // ✅ 전체 완료 상태 계산 → "완료" / "미완료"
   const getOverrallStatus = (member) => {
     const allDone = completeKeys.every(k => Number(member?.[k] ?? 0) === 1);
     return allDone ? '완료' : '미완료';
   };
 
-  // 정렬 핸들러
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
@@ -35,11 +30,11 @@ const DashboardTable = ({ data }) => {
     }));
   };
 
-  // 필터 + 정렬 처리
+  // ✅ 필터링 + 정렬
   const filteredData = data
-    .filter((item) => { // 검색어와 상태 필터가 모두 맞는 데이터만 남김
+    .filter((item) => {
       const flightMatch = (item.flightNumber ?? "").toLowerCase().includes(searchTerm.toLowerCase());
-      const status = getOverrallStatus(item); // item.tasks 제거
+      const status = getOverrallStatus(item); // ✅ item.tasks 제거
       const statusMatch =
         statusFilter === 'all' ||
         (statusFilter === '완료' && status === '완료') ||
@@ -47,7 +42,7 @@ const DashboardTable = ({ data }) => {
 
       return flightMatch && statusMatch;
     })
-    .sort((a, b) => { // 클릭한 열 기준으로 정렬
+    .sort((a, b) => {
       if (!sortConfig.key) return 0;
       const A = (a[sortConfig.key] ?? '').toString();
       const B = (b[sortConfig.key] ?? '').toString();
@@ -60,22 +55,22 @@ const DashboardTable = ({ data }) => {
     <div className="dashboard-container">
       <h2>상세 대시보드</h2>
 
-      {/* 검색 + 상태 필터 */}
+      {/* ✅ 검색 + 상태 필터 */}
       <div className="dashboard-controls">
         <input
           type="text"
           placeholder="비행편명 검색"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-      />
+        />
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           <option value="all">전체</option>
           <option value="완료">완료</option>
           <option value="미완료">미완료</option>
         </select>
-    </div>
+      </div>
 
-      {/* 테이블 */}
+      {/* ✅ 테이블 */}
       <div className="table-wrapper">
         <table className="dashboard-table">
           <thead>
@@ -95,10 +90,9 @@ const DashboardTable = ({ data }) => {
               <th>업로드일</th>
             </tr>
           </thead>
-          
           <tbody>
             {filteredData.map((item, idx) => {
-              const overallStatus = getOverrallStatus(item);
+              const overallStatus = getOverrallStatus(item); // ✅ 수정
               const statusClass =
                 overallStatus === '완료' ? 'cell-complete' : 'cell-incomplete';
 
@@ -109,14 +103,14 @@ const DashboardTable = ({ data }) => {
                   <td data-label="목적지">{item.destination}</td>
                   <td data-label="기종">{item.acversion}</td>
 
-                  {/* bool_complete1~8 값 표시 */}
+                  {/* ✅ bool_complete1~8 값 표시 */}
                   {completeKeys.map((key) => (
                     <td data-label={key.toUpperCase()} key={key}>
                       {item?.[key] ?? 0}
                     </td>
                   ))}
 
-                  {/* 완료/미완료 표시 */}
+                  {/* ✅ 완료/미완료 표시 */}
                   <td data-label="완료 여부" className={statusClass}>
                     {overallStatus}
                   </td>
