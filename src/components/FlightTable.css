@@ -91,47 +91,53 @@
   
   .flight-table th:nth-child(5),
   .flight-table td:nth-child(5) {
-    width: 10%; /* 출발날짜 */
+    width: 4%; /* 레그넘버 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(6),
   .flight-table td:nth-child(6) {
-    width: 8%; /* 출발시간 */
+    width: 10%; /* 출발날짜 */
   }
   
   .flight-table th:nth-child(7),
   .flight-table td:nth-child(7) {
-    width: 8%; /* 작업시작 */
+    width: 8%; /* 출발시간 */
   }
   
   .flight-table th:nth-child(8),
   .flight-table td:nth-child(8) {
-    width: 8%; /* 준비시간 */
+    width: 8%; /* 작업시작 */
   }
   
   .flight-table th:nth-child(9),
   .flight-table td:nth-child(9) {
-    width: 8%; /* 작업종료 */
+    width: 8%; /* 준비시간 */
   }
   
   .flight-table th:nth-child(10),
   .flight-table td:nth-child(10) {
-    width: 6%; /* 완료 */
+    width: 8%; /* 작업종료 */
   }
   
   .flight-table th:nth-child(11),
   .flight-table td:nth-child(11) {
-    width: 12%; /* 주석 */
-    white-space: normal;
+    width: 6%; /* 완료 */
   }
   
   .flight-table th:nth-child(12),
   .flight-table td:nth-child(12) {
-    width: 8%; /* 완료일자 */
+    width: 12%; /* 주석 */
+    white-space: normal;
   }
   
   .flight-table th:nth-child(13),
   .flight-table td:nth-child(13) {
+    width: 8%; /* 완료일자 */
+  }
+  
+  .flight-table th:nth-child(14),
+  .flight-table td:nth-child(14) {
     width: 8%; /* 완료시간 */
   }
 }
