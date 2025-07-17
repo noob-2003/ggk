@@ -1,10 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./DashboardUI.css";
 import {
   PieChart,
   Pie,
   Cell,
-  //  Legend,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -13,29 +12,23 @@ import {
   YAxis
 } from "recharts";
 
-import { makeAndPack1Data } from "./MakeAndPack1";
-import { makeAndPack2Data } from "./MakeAndPack2";
-import { makeAndPack3Data } from "./MakeAndPack3";
-import { makeAndPack4Data } from "./MakeAndPack4";
-import { pickAndPack1Data } from "./PickAndPack1";
-import { pickAndPack2Data } from "./PickAndPack2";
-import { washAndPack1Data } from "./WashAndPack1";
-import { washAndPack2Data } from "./WashAndPack2";
-
 const COLORS = ["#4caf50", "#f44336"];
 
-// 완료/미완료 카운트
-const countStatus = (arr) => {
-  let completed = 0;
-  let notCompleted = 0;
+// ✅ 완료 스텝 카운트 함수
+const countStepStatus = (arr, keys) => {
+  let totalSteps = arr.length * keys.length;
+  let completedSteps = 0;
+
   arr.forEach(item => {
-    if (item.completed === "Y") completed++;
-    else if (item.completed === "N") notCompleted++;
+    keys.forEach(k => {
+      if (Number(item?.[k] ?? 0) === 1) completedSteps++;
+    });
   });
-  return { completed, notCompleted };
+
+  return { completedSteps, totalSteps };
 };
 
-// PieChart 안전 렌더링
+// ✅ PieChart 안전 렌더링
 const renderPie = (data) => {
   const safeData = data || [];
   const hasData = safeData.some(d => d.value > 0);
@@ -44,7 +37,6 @@ const renderPie = (data) => {
     <div style={{ width: "100%", textAlign: "center" }}>
       {hasData ? (
         <>
-          {/* 원 그래프 */}
           <ResponsiveContainer width="95%" height={300}>
             <PieChart>
               <Pie
@@ -60,7 +52,6 @@ const renderPie = (data) => {
                 }}
                 labelLine={false}
                 stroke="none"
-                strokeWidth={0}
                 isAnimationActive={false}
                 startAngle={90}
                 endAngle={-270}
@@ -72,26 +63,19 @@ const renderPie = (data) => {
             </PieChart>
           </ResponsiveContainer>
 
-          {/* 수치 + 범례 중앙 정렬 */}
           <div style={{ display: "flex", justifyContent: "center", gap: "80px", marginTop: "20px" }}>
-            {/* ✅ 미완료 */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span style={{ color: "#f44336", fontWeight: "bold", fontSize: "18px" }}>
                 {safeData[1].value}건
               </span>
-              <span style={{ color: "#f44336", fontWeight: "bold" }}>
-                ■ 미완료
-              </span>
+              <span style={{ color: "#f44336", fontWeight: "bold" }}>■ 미완료</span>
             </div>
 
-            {/* 완료 */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span style={{ color: "#4caf50", fontWeight: "bold", fontSize: "18px" }}>
                 {safeData[0].value}건
               </span>
-              <span style={{ color: "#4caf50", fontWeight: "bold" }}>
-                ■ 완료
-              </span>
+              <span style={{ color: "#4caf50", fontWeight: "bold" }}>■ 완료</span>
             </div>
           </div>
         </>
@@ -106,17 +90,14 @@ const renderPie = (data) => {
             fontSize: "1.1rem",
           }}
         >
-          데이터 없음
+          📭 데이터 없음
         </div>
       )}
     </div>
   );
 };
 
-
-
-
-// BarChart 안전 렌더링
+// ✅ BarChart 안전 렌더링
 const renderBar = (data) => {
   const safeData = data || [];
   const hasData = safeData.some(d => (d.완료 > 0 || d.미완료 > 0));
@@ -125,7 +106,6 @@ const renderBar = (data) => {
     <div style={{ width: "100%", textAlign: "center" }}>
       {hasData ? (
         <>
-          {/* 막대그래프 */}
           <ResponsiveContainer width="95%" height={300}>
             <BarChart data={safeData} barSize={30} barGap={50}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -136,23 +116,18 @@ const renderBar = (data) => {
             </BarChart>
           </ResponsiveContainer>
 
-          {/* 수치 + 범례 중앙 정렬 */}
           <div style={{ display: "flex", justifyContent: "center", gap: "80px", marginTop: "20px" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span style={{ color: "#f44336", fontWeight: "bold", fontSize: "18px" }}>
                 {safeData[0].미완료}건
               </span>
-              <span style={{ color: "#f44336", fontWeight: "bold" }}>
-                ■ 미완료
-              </span>
+              <span style={{ color: "#f44336", fontWeight: "bold" }}>■ 미완료</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span style={{ color: "#4caf50", fontWeight: "bold", fontSize: "18px" }}>
                 {safeData[0].완료}건
               </span>
-              <span style={{ color: "#4caf50", fontWeight: "bold" }}>
-                ■ 완료
-              </span>
+              <span style={{ color: "#4caf50", fontWeight: "bold" }}>■ 완료</span>
             </div>
           </div>
         </>
@@ -167,57 +142,113 @@ const renderBar = (data) => {
             fontSize: "1.1rem",
           }}
         >
-          데이터 없음
+          📭 데이터 없음
         </div>
       )}
     </div>
   );
 };
 
-
 function DashboardUI() {
-  // 부서별 카운트
-  const makeCount = useMemo(() => countStatus([
-    ...makeAndPack1Data,
-    ...makeAndPack2Data,
-    ...makeAndPack3Data,
-    ...makeAndPack4Data
-  ]), []);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const pickCount = useMemo(() => countStatus([
-    ...pickAndPack1Data,
-    ...pickAndPack2Data
-  ]), []);
+  // ✅ DB에서 데이터 가져오기
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch("http://211.42.159.18:8080/api/members");
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error("데이터 불러오기 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboardData();
+  }, []);
 
-  const washCount = useMemo(() => countStatus([
-    ...washAndPack1Data,
-    ...washAndPack2Data
-  ]), []);
+  // ✅ 부서별 완료 스텝 카운트
+  const makeStep = useMemo(
+    () => countStepStatus(data, ['bool_complete1','bool_complete2','bool_complete3','bool_complete4']),
+    [data]
+  );
+  const pickStep = useMemo(
+    () => countStepStatus(data, ['bool_complete5','bool_complete6']),
+    [data]
+  );
+  const washStep = useMemo(
+    () => countStepStatus(data, ['bool_complete7','bool_complete8']),
+    [data]
+  );
 
-  // 그래프 데이터 생성
+  // ✅ 전체 진행률 스텝 카운트
+  const totalStep = useMemo(
+    () => countStepStatus(data, [
+      'bool_complete1','bool_complete2','bool_complete3','bool_complete4',
+      'bool_complete5','bool_complete6','bool_complete7','bool_complete8'
+    ]),
+    [data]
+  );
+
+  // ✅ PieChart 데이터
   const makePie = [
-    { name: "완료", value: makeCount.completed },
-    { name: "미완료", value: makeCount.notCompleted }
+    { name: "완료", value: makeStep.completedSteps },
+    { name: "미완료", value: makeStep.totalSteps - makeStep.completedSteps }
   ];
   const pickPie = [
-    { name: "완료", value: pickCount.completed },
-    { name: "미완료", value: pickCount.notCompleted }
+    { name: "완료", value: pickStep.completedSteps },
+    { name: "미완료", value: pickStep.totalSteps - pickStep.completedSteps }
   ];
   const washPie = [
-    { name: "완료", value: washCount.completed },
-    { name: "미완료", value: washCount.notCompleted }
+    { name: "완료", value: washStep.completedSteps },
+    { name: "미완료", value: washStep.totalSteps - washStep.completedSteps }
+  ];
+  const totalPie = [
+    { name: "완료", value: totalStep.completedSteps },
+    { name: "미완료", value: totalStep.totalSteps - totalStep.completedSteps }
   ];
 
-  const makeBar = [{ name: "Make&Pack", 완료: makeCount.completed, 미완료: makeCount.notCompleted }];
-  const pickBar = [{ name: "Pick&Pack", 완료: pickCount.completed, 미완료: pickCount.notCompleted }];
-  const washBar = [{ name: "Wash&Pack", 완료: washCount.completed, 미완료: washCount.notCompleted }];
+  // ✅ BarChart 데이터
+  const makeBar = [{
+    name: "Make&Pack",
+    완료: makeStep.completedSteps,
+    미완료: makeStep.totalSteps - makeStep.completedSteps
+  }];
+  const pickBar = [{
+    name: "Pick&Pack",
+    완료: pickStep.completedSteps,
+    미완료: pickStep.totalSteps - pickStep.completedSteps
+  }];
+  const washBar = [{
+    name: "Wash&Pack",
+    완료: washStep.completedSteps,
+    미완료: washStep.totalSteps - washStep.completedSteps
+  }];
+  const totalBar = [{
+    name: "전체",
+    완료: totalStep.completedSteps,
+    미완료: totalStep.totalSteps - totalStep.completedSteps
+  }];
+
+  if (loading) return <div>데이터 불러오는 중...</div>;
 
   return (
     <div className="dashboard-ui-container">
-      <h1>✅ 부서별 완료 현황</h1>
+      <h1>✅ 부서별 + 전체 진행 스텝 현황 (DB 실시간)</h1>
 
       <div className="department-container">
-        {/* Make & Pack */}
+        {/* ✅ 전체 진행률 */}
+        <div className="department-card">
+          <h2>전체 진행률</h2>
+          <div className="chart-wrap">
+            {renderPie(totalPie)}
+            {renderBar(totalBar)}
+          </div>
+        </div>
+
+        {/* ✅ Make&Pack */}
         <div className="department-card">
           <h2>Make & Pack</h2>
           <div className="chart-wrap">
@@ -226,7 +257,7 @@ function DashboardUI() {
           </div>
         </div>
 
-        {/* Pick & Pack */}
+        {/* ✅ Pick&Pack */}
         <div className="department-card">
           <h2>Pick & Pack</h2>
           <div className="chart-wrap">
@@ -235,7 +266,7 @@ function DashboardUI() {
           </div>
         </div>
 
-        {/* Wash & Pack */}
+        {/* ✅ Wash&Pack */}
         <div className="department-card">
           <h2>Wash & Pack</h2>
           <div className="chart-wrap">
