@@ -25,10 +25,14 @@ const renderCell = (key, value) => {
   return <input type="text" defaultValue={value} />;
 };
 
-const FlightTable = ({ data, toggleBoolComplete, washOnly = false }) => {
+const FlightTable = ({ data, toggleBoolComplete }) => {
   const [flightFilter, setFlightFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
   const [completedFilter, setCompletedFilter] = useState("");
+
+  // ✅ 디버깅: props가 제대로 들어왔는지 확인
+  console.log("DEBUG >> FlightTable props.toggleBoolComplete:", toggleBoolComplete);
+  console.log("DEBUG >> FlightTable received data length:", data?.length);
 
   const uniqueFlights = [...new Set(data.map((f) => f.flight))];
   const uniqueDestinations = [...new Set(data.map((f) => f.destination))];
@@ -98,7 +102,6 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false }) => {
               <th>비행편명</th>
               <th>목적지</th>
               <th>기종</th>
-              {washOnly && <th>레그넘버</th>}
               <th className="center-align">출발날짜</th>
               <th className="center-align">출발시간</th>
               <th className="center-align">작업시작</th>
@@ -117,7 +120,6 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false }) => {
                 <td>{renderCell("flight", f.flight)}</td>
                 <td>{renderCell("destination", f.destination)}</td>
                 <td>{renderCell("aircraft", f.aircraft)}</td>
-                {washOnly && ( <td data-label="레그넘버" className="center-align"> {f.regNumber} </td> )} 
                 <td>{renderCell("departureDate", f.departureDate)}</td>
                 <td className="center-align">
                   {renderCell("departureTime", f.departureTime)}
@@ -133,9 +135,14 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false }) => {
                   <input
                     type="checkbox"
                     checked={f.bool_complete1 === 1}
-                    onChange={() =>
-                      toggleBoolComplete(f.id, 1, f.bool_complete1)
-                    }
+                    onChange={() => {
+                      console.log("DEBUG >> checkbox changed:", {
+                        id: f.id,
+                        step: 1,
+                        currentValue: f.bool_complete1,
+                      });
+                      toggleBoolComplete(f.id, 1, f.bool_complete1);
+                    }}
                   />
                 </td>
 
