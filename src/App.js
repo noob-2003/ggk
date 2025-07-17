@@ -13,11 +13,13 @@ import DashboardPage from './pages/DashboardPage';
 import AdminLogin from './pages/AdminLogin';
 import FileUpload from './pages/FileUpload';
 import DashboardUI from './pages/DashboardUI';
+import { MembersProvider } from './context/MembersContext';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   return (
     <Router>
+      <MembersProvider>
         <Routes>
         <Route path="/" element={<MainPage />} /> 
 
@@ -34,7 +36,10 @@ function App() {
 
         <Route path="/admin-login" element={<AdminLogin onLogin={() => setIsAuthenticated(true)}/>} />
           
-        <Route path="/dashboard" element={<DashboardPage />} />
+        
+          <Route path="/dashboard" element={<DashboardPage />} />
+        
+
         {/* <Route path="/dashboard" element={isAuthenticated ? <DashboardPage /> : <Navigate to="/admin-login" replace />}/> */}
 
         <Route path="/dashboardUI" element={<DashboardUI />} />
@@ -44,6 +49,7 @@ function App() {
         <Route path="/file-upload" element={isAuthenticated ? <FileUpload /> : <Navigate to="/admin-login" replace />}/>
        
         </Routes>
+      </MembersProvider>
     </Router>
   );
 }
