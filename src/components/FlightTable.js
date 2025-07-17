@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './FlightTable.css';
 
 // 셀 정의 
@@ -28,7 +28,7 @@ const renderCell = (key, value) => {
 };
 
 const FlightTable = ({ data, washOnly = false }) => {
-  // ✅ 비행편/목적지/완료 여부 필터링
+  // ✅ 비행편/목적지/완료 여부 필터링 상태
   const [flightFilter, setFlightFilter] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
   const [completedFilter, setCompletedFilter] = useState('');
@@ -169,6 +169,7 @@ const FlightTable = ({ data, washOnly = false }) => {
                 <td data-label="비행편명">{renderCell('flight', f.flight)}</td>
                 <td data-label="목적지">{renderCell('destination', f.destination)}</td>
                 <td data-label="기종">{renderCell('aircraft', f.aircraft)}</td>
+                {washOnly && ( <td data-label="레그넘버" className="center-align"> {f.legNumber ?? '-'} </td> )}
                 <td data-label="출발날짜" className="nowrap-cell">{renderCell('departureDate', f.departureDate)}</td>
                 <td data-label="출발시간" className="center-align">{renderCell('departureTime', f.departureTime)}</td>
                 <td data-label="작업시작" className="center-align">{renderCell('startTime', f.startTime)}</td>
