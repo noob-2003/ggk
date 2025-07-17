@@ -44,7 +44,7 @@ const AdminLogin = ({ onLogin }) => {
       <div className="login-wrapper">
         <h2 className="login-title">관리자 로그인</h2>
 
-        {/* form 태그 추가 + 엔터 지원 */}
+        {/* ✅ form 태그 추가 + 엔터 지원 */}
         <form
           className="login-box"
           onSubmit={(e) => {
@@ -61,13 +61,11 @@ const AdminLogin = ({ onLogin }) => {
             disabled={loading}
           />
 
-          {/* password 값이 있으면 active 클래스 추가 */}
+          {/* ✅ password 값이 있으면 active 클래스 추가 */}
           <button
             type="submit"
             className={`login-button ${password ? 'active' : ''}`}
-            disabled={loading}
-          >
-            Log in
+            disabled={loading}>Log in
           </button>
         </form>
       </div>
