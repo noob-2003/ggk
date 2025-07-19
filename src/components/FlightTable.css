@@ -39,7 +39,7 @@
 .flight-table th,
 .flight-table td {
   border: 1px solid #ccc;
-  padding: 8px 6px;
+  padding: 4px 6px;
   text-align: left;
   white-space: normal;
   word-wrap: break-word;
@@ -71,81 +71,136 @@
 @media screen and (min-width: 769px) {
   .flight-table th:nth-child(1),
   .flight-table td:nth-child(1) {
-    width: 4%; /* ID */
+    width: 2.5%; /* ID */
+    text-align: center;
   }
   
   .flight-table th:nth-child(2),
   .flight-table td:nth-child(2) {
-    width: 10%; /* 비행편명 */
+    width: 4%; /* 비행편명 */
+    text-align: center;
   }
-  
+
   .flight-table th:nth-child(3),
   .flight-table td:nth-child(3) {
-    width: 12%; /* 목적지 */
+    width: 3.5%; /* 항공사구분 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(4),
   .flight-table td:nth-child(4) {
-    width: 10%; /* 기종 */
+    width: 3%; /* 목적지 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(5),
   .flight-table td:nth-child(5) {
-    width: 4%; /* 레그넘버 */
+    width: 4.5%; /* 기종 */
     text-align: center;
   }
-  
+
   .flight-table th:nth-child(6),
   .flight-table td:nth-child(6) {
-    width: 10%; /* 출발날짜 */
+    width: 3.5%; /* 레그넘버 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(7),
   .flight-table td:nth-child(7) {
-    width: 8%; /* 출발시간 */
+    width: 3.5%; /* 출발날짜 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(8),
   .flight-table td:nth-child(8) {
-    width: 8%; /* 작업시작 */
+    width: 3.5%; /* 출발시간 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(9),
   .flight-table td:nth-child(9) {
-    width: 8%; /* 준비시간 */
+    width: 3.5%; /* 작업시작 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(10),
   .flight-table td:nth-child(10) {
-    width: 8%; /* 작업종료 */
+    width: 3.5%; /* 준비시간 */
+    text-align: center;
   }
   
   .flight-table th:nth-child(11),
   .flight-table td:nth-child(11) {
-    width: 6%; /* 완료 */
+    width: 4%; /* 작업종료 */
+    text-align: center;
   }
-  
+
   .flight-table th:nth-child(12),
   .flight-table td:nth-child(12) {
-    width: 12%; /* 주석 */
-    white-space: normal;
+    width: 4%; /* 카트 MEAL */
+    text-align: center;
   }
-  
+
   .flight-table th:nth-child(13),
   .flight-table td:nth-child(13) {
-    width: 8%; /* 완료일자 */
+    width: 4%; /* 카트 EQ */
+    text-align: center;
   }
-  
+
   .flight-table th:nth-child(14),
   .flight-table td:nth-child(14) {
-    width: 8%; /* 완료시간 */
+    width: 4%; /* 카트 GLSS */
+    text-align: center;
+  }
+
+  .flight-table th:nth-child(15),
+  .flight-table td:nth-child(15) {
+    width: 4%; /* 카트 EY */
+    text-align: center;
+  }
+
+  .flight-table th:nth-child(16),
+  .flight-table td:nth-child(16) {
+    width: 5%; /* 카트 LINNEN */
+    text-align: center;
+  }
+
+  .flight-table th:nth-child(17),
+  .flight-table td:nth-child(17) {
+    width: 5%; /* 카트 S/T SET */
+    text-align: center;
+  }
+  
+  .flight-table th:nth-child(18),
+  .flight-table td:nth-child(18) {
+    width: 4%; /* 완료 */
+    white-space: normal;
+    text-align: center;
+  }
+  
+  .flight-table th:nth-child(19),
+  .flight-table td:nth-child(19) {
+    width: 9%; /* 주석 */
+    text-align: center;
+  }
+  
+  .flight-table th:nth-child(20),
+  .flight-table td:nth-child(20) {
+    width: 4%; /* 완료일자 */
+    text-align: center;
+  }
+
+  .flight-table th:nth-child(21),
+  .flight-table td:nth-child(21) {
+    width: 4%; /* 완료시간 */
+    text-align: center;
   }
 }
 
 /* --- 반응형 스타일 (모바일/태블릿) --- */
 @media screen and (max-width: 768px) {
   .table-wrapper {
-    overflow-x: hidden;
+    overflow-x: auto;
   }
 
   .flight-table {
@@ -176,7 +231,7 @@
     box-sizing: border-box;
     border: none;
     border-bottom: 1px solid #eee;
-    padding: 12px 10px;
+    padding: 4px 6px;
     padding-left: 50%; 
     position: relative;
     text-align: right;
