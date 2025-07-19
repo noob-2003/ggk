@@ -39,22 +39,23 @@ const mapToFlightTableData = (item) => {
     endTime = formatTime(endTimeObj);
   }
 
-  // ✅ 완료 여부 (WashAndPack은 7~8 중 하나라도 1이면 완료)
+  // ✅ 완료 여부
   const isCompleted =
     Number(item.bool_complete7) === 1;
 
   return {
     id: item.id ?? "-",
     flight: item.flightNumber ?? "-",         // 편명
+    airline: item.airline ?? "-",             // 항공사구분
     destination: item.destination ?? "-",     // 목적지
     aircraft: item.acversion ?? "-",          // 기종
-    regNumber: item.ac_Reg ?? "-",         // 레그넘버 
+    regNumber: item.ac_Reg ?? "-",            // 레그넘버 
     departureDate: item.departuredate ?? "-", // 출발날짜
     departureTime: arrivalTime ?? "-",        // 출발시간
     startTime: startTime,                     // 출발 -8시간
     prepDays: -1,                             // 준비시간 고정
     endTime: endTime,                         // 작업시작 +2시간
-    completed: isCompleted ? "Y" : "N",       // ✅ 하나라도 1이면 Y
+    completed: isCompleted ? "Y" : "N",       // 하나라도 1이면 Y
     note: "",
     completeDate: "",
     completeTime: ""

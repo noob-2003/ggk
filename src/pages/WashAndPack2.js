@@ -39,29 +39,30 @@ const mapToFlightTableData = (item) => {
     endTime = formatTime(endTimeObj);
   }
 
-  // ✅ 완료 여부 (WashAndPack은 7~8 중 하나라도 1이면 완료)
+  // ✅ 완료 여부
   const isCompleted =
     Number(item.bool_complete8) === 1;
 
   return {
     id: item.id ?? "-",
     flight: item.flightNumber ?? "-",         // 편명
+    airline : item.airline ?? "-",             // 항공사구분
     destination: item.destination ?? "-",     // 목적지
     aircraft: item.acversion ?? "-",          // 기종
-    regNumber: item.AC_Reg ?? "-",            // 레그넘버 
+    regNumber: item.ac_Reg ?? "-",            // 레그넘버
     departureDate: item.departuredate ?? "-", // 출발날짜
     departureTime: arrivalTime ?? "-",        // 출발시간
     startTime: startTime,                     // 출발 -8시간
     prepDays: -1,                             // 준비시간 고정
     endTime: endTime,                         // 작업시작 +2시간
-    completed: isCompleted ? "Y" : "N",       // ✅ 하나라도 1이면 Y
+    completed: isCompleted ? "Y" : "N",       // 하나라도 1이면 Y
     note: "",
     completeDate: "",
     completeTime: ""
   };
 };
 
-const WashAndPack1 = () => {
+const WashAndPack2 = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,11 +94,11 @@ const WashAndPack1 = () => {
   return (
     <div>
       <h2 style={{ textAlign: "center", marginTop: "20px", marginBottom: "30px", fontSize: "24px" }}>
-        Wash and Pack 1 (DB 실시간)
+        Wash and Pack 2 (DB 실시간)
       </h2>
-      <FlightTable data={data} washOnly={true}/>
+      <FlightTable data={data} washOnly={true} makeOnly={true} />
     </div>
   );
 };
 
-export default WashAndPack1;
+export default WashAndPack2;

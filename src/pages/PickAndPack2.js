@@ -1,180 +1,102 @@
-import FlightTable from '../components/FlightTable';
+import React, { useEffect, useState } from "react";
+import FlightTable from "../components/FlightTable";
 
-export const pickAndPack2Data = [
-  {
-    id: 1,
-    flight: 'OZ 1234',
-    destination: '요하네스버그',
-    aircraft: 'OZA333E',
-    departureDate: '2025-06-10',
-    departureTime: '8:10',
-    startTime: '8:00',
-    prepDays: -1,
-    endTime: '10:00',
-    completed: 'Y',
-    note: '다음담당자에게인계합니다',
-    completeDate: '6/10/2025',
-    completeTime: '09:00',
-  },
-  {
-    id: 2,
-    flight: 'OZ 5678',
-    destination: '시드니',
-    aircraft: 'OZA777E',
-    departureDate: '2025-06-11',
-    departureTime: '9:30',
-    startTime: '9:00',
-    prepDays: -1,
-    endTime: '11:30',
-    completed: 'N',
-    note: '',
-    completeDate: '',
-    completeTime: '',
-  },
-  {
-    id: 3,
-    flight: 'OZ 9101',
-    destination: '프랑크푸르트',
-    aircraft: 'OZA388E',
-    departureDate: '2025-06-12',
-    departureTime: '13:45',
-    startTime: '13:00',
-    prepDays: -1,
-    endTime: '15:00',
-    completed: 'Y',
-    note: '기내식 확인 완료',
-    completeDate: '6/12/2025',
-    completeTime: '14:10',
-  },
-  {
-    id: 4,
-    flight: 'OZ 1122',
-    destination: '로스앤젤레스',
-    aircraft: 'OZA350E',
-    departureDate: '2025-06-13',
-    departureTime: '17:20',
-    startTime: '16:30',
-    prepDays: -1,
-    endTime: '18:30',
-    completed: 'N',
-    note: '',
-    completeDate: '',
-    completeTime: '',
-  },
-  {
-    id: 5,
-    flight: 'OZ 3344',
-    destination: '홍콩',
-    aircraft: 'OZA321E',
-    departureDate: '2025-06-14',
-    departureTime: '6:50',
-    startTime: '6:00',
-    prepDays: -1,
-    endTime: '8:00',
-    completed: 'Y',
-    note: '우선 탑재 요청',
-    completeDate: '6/14/2025',
-    completeTime: '07:15',
-  },
-{
-    id: 6,
-    flight: 'OZ 7788',
-    destination: '방콕',
-    aircraft: 'OZA330E',
-    departureDate: '2025-06-15',
-    departureTime: '10:00',
-    startTime: '9:30',
-    prepDays: -1,
-    endTime: '11:30',
-    completed: 'N',
-    note: '',
-    completeDate: '',
-    completeTime: '',
-  },
-  {
-    id: 7,
-    flight: 'OZ 9900',
-    destination: '런던',
-    aircraft: 'OZA777E',
-    departureDate: '2025-06-16',
-    departureTime: '12:15',
-    startTime: '11:45',
-    prepDays: -1,
-    endTime: '13:45',
-    completed: 'Y',
-    note: '화물 적재 확인',
-    completeDate: '6/16/2025',
-    completeTime: '12:50',
-  },
-  {
-    id: 8,
-    flight: 'OZ 2468',
-    destination: '도쿄',
-    aircraft: 'OZA321E',
-    departureDate: '2025-06-17',
-    departureTime: '7:00',
-    startTime: '6:30',
-    prepDays: -1,
-    endTime: '8:00',
-    completed: 'N',
-    note: '',
-    completeDate: '',
-    completeTime: '',
-  },
-  {
-    id: 9,
-    flight: 'OZ 1357',
-    destination: '싱가포르',
-    aircraft: 'OZA350E',
-    departureDate: '2025-06-18',
-    departureTime: '15:40',
-    startTime: '15:00',
-    prepDays: -1,
-    endTime: '17:00',
-    completed: 'Y',
-    note: '승객 요청사항 반영',
-    completeDate: '6/18/2025',
-    completeTime: '16:10',
-  },
-  {
-    id: 10,
-    flight: 'OZ 8642',
-    destination: '뉴욕',
-    aircraft: 'OZA388E',
-    departureDate: '2025-06-19',
-    departureTime: '22:00',
-    startTime: '21:00',
-    prepDays: -1,
-    endTime: '23:30',
-    completed: 'N',
-    note: '',
-    completeDate: '',
-    completeTime: '',
-  },
-  {
-    id: 11,
-    flight: 'OZ 1111',
-    destination: '파리',
-    aircraft: 'OZA350E',
-    departureDate: '2025-06-20',
-    departureTime: '16:00',
-    startTime: '15:30',
-    prepDays: -1,
-    endTime: '17:30',
-    completed: 'Y',
-    note: '기내 청소 완료',
-    completeDate: '6/20/2025',
-    completeTime: '16:40',
-  },
+// ✅ 안전한 시간 계산
+const calcTime = (baseDate, timeStr, offsetHours) => {
+  if (!timeStr) return null;
+  const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+  if (isNaN(hours) || isNaN(minutes)) return null;
 
-  // ... 추가 데이터
-];
+  const dateObj = new Date(baseDate);
+  dateObj.setHours(hours);
+  dateObj.setMinutes(minutes);
+  dateObj.setSeconds(seconds || 0);
 
-const PickAndPack2 = () => (
-  <div>
-    <h2 style={{ textAlign: 'center', marginTop: '20px' , marginBottom: '30px', fontSize: '24px'}}>Pick and Pack 2</h2>
-    <FlightTable data={pickAndPack2Data} />
-  </div>
-);
+  dateObj.setHours(dateObj.getHours() + offsetHours);
+  return dateObj;
+};
+
+// ✅ Date → HH:mm
+const formatTime = (dateObj) => {
+  if (!dateObj) return "-";
+  const h = String(dateObj.getHours()).padStart(2, "0");
+  const m = String(dateObj.getMinutes()).padStart(2, "0");
+  return `${h}:${m}`;
+};
+
+// ✅ DB → FlightTable 매핑
+const mapToFlightTableData = (item) => {
+  const baseDate = new Date(item.departuredate ?? "1970-01-01");
+  const arrivalTime = item.arrivaltime ?? null;
+
+  const startTimeObj = calcTime(baseDate, arrivalTime, -8);
+  const startTime = formatTime(startTimeObj);
+
+  let endTime = "-";
+  if (startTimeObj) {
+    const endTimeObj = new Date(startTimeObj);
+    endTimeObj.setHours(endTimeObj.getHours() + 2);
+    endTime = formatTime(endTimeObj);
+  }
+
+  // ✅ 완료 여부
+  const isCompleted =
+    Number(item.bool_complete6) === 1;
+
+  return {
+    id: item.id ?? "-",
+    flight: item.flightNumber ?? "-",         // 편명
+    destination: item.destination ?? "-",     // 목적지
+    aircraft: item.acversion ?? "-",          // 기종
+    departureDate: item.departuredate ?? "-", // 출발날짜
+    departureTime: arrivalTime ?? "-",        // 출발시간
+    startTime: startTime,                     // 출발 -8시간
+    prepDays: -1,                             // 준비시간 고정
+    endTime: endTime,                         // 작업시작 +2시간
+    completed: isCompleted ? "Y" : "N",       // ✅ 하나라도 1이면 Y
+    note: "",
+    completeDate: "",
+    completeTime: ""
+  };
+};
+
+const PickAndPack2 = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://211.42.159.18:8080/api/members");
+        const json = await res.json();
+
+        console.log("✅ API 응답:", json);
+
+        const mapped = json.map((item) => mapToFlightTableData(item));
+
+        console.log("✅ 변환된 데이터:", mapped);
+
+        setData(mapped);
+      } catch (err) {
+        console.error("❌ 데이터 불러오기 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>데이터 불러오는 중...</div>;
+
+  return (
+    <div>
+      <h2 style={{ textAlign: "center", marginTop: "20px", marginBottom: "30px", fontSize: "24px" }}>
+        Pick and Pack 2 (DB 실시간)
+      </h2>
+      <FlightTable data={data} />
+    </div>
+  );
+};
 
 export default PickAndPack2;
