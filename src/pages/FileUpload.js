@@ -69,60 +69,62 @@ function FileUpload() {
 
 
   return (
-    <div className="upload-container">
-      <h1>Upload a file</h1>
-
-      <div
-        className={`drop-zone ${isDragOver ? 'dragover' : ''}`}
-        onClick={handleBrowseClick}
-        onDragEnter={handleDragEnter}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          multiple
-          hidden
-        />
-        <p>
-          Drag and drop files here, or{' '}
-          <span className="browse-link" onClick={(e) => { e.stopPropagation(); handleBrowseClick(); }}>
-            browse
-          </span>{' '}
-          your computer.
-        </p>
+    <div className="page-wrapper">
+      <div className="upload-container">
+        <h1>Upload a file</h1>
+    
+        <div
+          className={`drop-zone ${isDragOver ? 'dragover' : ''}`}
+          onClick={handleBrowseClick}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            multiple
+            hidden
+          />
+          <p>
+            Drag and drop files here, or{' '}
+            <span className="browse-link" onClick={(e) => { e.stopPropagation(); handleBrowseClick(); }}>
+              browse
+            </span>{' '}
+            your computer.
+          </p>
+        </div>
+    
+        {selectedFiles.length > 0 && (
+          <div className="file-list-container">
+            {selectedFiles.map((file, index) => (
+              <div key={`${file.name}-${index}`} className="file-list-item">
+                <span>{file.name}</span>
+                <button
+                  type="button"
+                  className="remove-file-btn"
+                  onClick={() => handleRemoveFile(file)}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+  
+        <button type="button" className="submit-btn" onClick={handleUpload}>
+          Submit
+        </button>
+      
+        {/* 업로드 성공 메시지 표시 */}
+        {successMessage && (
+          <div style={{ marginTop: "20px", color: "green", fontWeight: "bold" }}>
+            {successMessage}
+          </div>
+        )}
       </div>
-
-      {selectedFiles.length > 0 && (
-        <div className="file-list-container">
-          {selectedFiles.map((file, index) => (
-            <div key={`${file.name}-${index}`} className="file-list-item">
-              <span>{file.name}</span>
-              <button
-                type="button"
-                className="remove-file-btn"
-                onClick={() => handleRemoveFile(file)}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <button type="button" className="submit-btn" onClick={handleUpload}>
-        Submit
-      </button>
-
-      {/* 업로드 성공 메시지 표시 */}
-      {successMessage && (
-        <div style={{ marginTop: "20px", color: "green", fontWeight: "bold" }}>
-          {successMessage}
-        </div>
-      )}
     </div>
   );
 }
