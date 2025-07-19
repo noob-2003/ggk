@@ -39,14 +39,20 @@ const MainPage = () => {
         <h2>관리자 화면</h2>
         <div className="admin-buttons-container">
           {/* 대시보드 게시판형 → 로그인 후 /dashboard 이동 */}
-          <button className="admin-button" onClick={() => goToLoginWithRedirect('/dashboard')}>
+          <button className="admin-button" onClick={() => navigate('/dashboard')}>
             대시보드 게시판형
           </button>
+          {/* <button className="admin-button" onClick={() => goToLoginWithRedirect('/dashboard')}>
+            대시보드 게시판형
+          </button> */}
 
           {/* 대시보드 UI형 → 로그인 후 /dashboardUI 이동 */}
-          <button className="admin-button" onClick={() => goToLoginWithRedirect('/dashboardUI')}>
+          <button className="admin-button" onClick={() => navigate('/dashboardUI')}>
             대시보드 UI형
           </button>
+          {/* <button className="admin-button" onClick={() => goToLoginWithRedirect('/dashboardUI')}>
+            대시보드 UI형
+          </button> */}
 
           {/* CSV Upload → 로그인 후 /file-upload 이동 */}
           <button className="admin-button" onClick={() => goToLoginWithRedirect('/file-upload')}>
