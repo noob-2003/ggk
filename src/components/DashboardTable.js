@@ -17,6 +17,17 @@ const DashboardTable = ({ data }) => {
     'bool_complete8'
   ];
 
+  // ✅ 사용자에게 보여줄 라벨 매핑
+  const completeKeyLabels = {
+    bool_complete1: "MNP1",
+    bool_complete2: "MNP2",
+    bool_complete3: "MNP3",
+    bool_complete5: "PNP1",
+    bool_complete6: "PNP2",
+    bool_complete7: "WNP1",
+    bool_complete8: "WNP2",
+  };
+
   // ✅ 전체 완료 상태 계산 → "완료" / "미완료"
   const getOverrallStatus = (member) => {
     const allDone = completeKeys.every(k => Number(member?.[k] ?? 0) === 1);
@@ -81,7 +92,7 @@ const DashboardTable = ({ data }) => {
               <th onClick={() => handleSort('acversion')}>기종</th>
 
               {completeKeys.map((key) => (
-                <th key={key}>{key.toUpperCase()}</th>
+                <th key={key}>{completeKeyLabels[key] ?? key}</th>
               ))}
 
               <th>완료 여부</th>
@@ -105,7 +116,7 @@ const DashboardTable = ({ data }) => {
 
                   {/* ✅ bool_complete1~8 값 표시 */}
                   {completeKeys.map((key) => (
-                    <td data-label={key.toUpperCase()} key={key}>
+                    <td data-label={completeKeyLabels[key] ?? key} key={key}>
                       {item?.[key] ?? 0}
                     </td>
                   ))}
