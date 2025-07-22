@@ -29,7 +29,6 @@ const formatTime = (dateObj) => {
 
 const MakeAndPack3 = () => {
   const { members, setMembers, loading } = useMembers();
-
     console.log("DEBUG >> useMembers() in MakeAndPack1:", {
     membersType: typeof members,
     setMembersType: typeof setMembers,
