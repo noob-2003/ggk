@@ -16,6 +16,17 @@ const cellMeta = {
   completeTime: "system",
 };
 
+function formatTimeHHMM(timeStr) {
+if (!timeStr) return "-";
+try {
+const [hour, minute] = timeStr.split(":");
+const h = hour.padStart(2, "0");
+const m = minute.padStart(2, "0");
+return `${h}:${m}`;
+} catch {
+return timeStr;
+} }
+
 const renderCell = (key, value) => {
   const source = cellMeta[key];
 
@@ -23,6 +34,18 @@ const renderCell = (key, value) => {
   if (source === "auto") return <em>{value}</em>;
   if (source === "excel") return <strong>{value}</strong>;
   return <input type="text" defaultValue={value} />;
+};
+
+const CompleteToggleButton = ({ flight, toggleBoolComplete }) => {
+  // ✅ flight 객체 내 완료 필드 자동 탐색
+  const completeField = Object.keys(flight).find((k) => k.startsWith("bool_complete"));
+  const isCompleted = flight[completeField] === 1;
+  const currentValue = flight[completeField] ?? 0;
+
+  const handleToggle = () => {
+    toggleBoolComplete(flight.id, undefined, currentValue);
+  };
+  return <input type="checkbox" checked={isCompleted} onChange={handleToggle} />;
 };
 
 const FlightTable = ({ data, toggleBoolComplete, washOnly = false, makeOnly = false }) => {
@@ -36,18 +59,29 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false, makeOnly = fa
   const todayStr = new Date().toISOString().slice(0, 10);
   const tomorrowStr = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
 
-  const filteredData = data.filter(
-    (f) =>
-      (flightFilter ? f.flight === flightFilter : true) &&
-      (destinationFilter ? f.destination === destinationFilter : true) &&
-      (completedFilter
-        ? f.bool_complete1 === 1
-          ? "Y" === completedFilter
-          : "N" === completedFilter
-        : true) &&
-        (dateFilter === "all"
-        ? true
-          : (f.departureDate?.slice(0, 10) === (dateFilter === "today" ? todayStr : tomorrowStr)))
+  const filteredData = useMemo(
+    () =>
+      data.filter((f) => {
+        const matchFlight = flightFilter ? f.flight === flightFilter : true;
+        const matchDest = destinationFilter ? f.destination === destinationFilter : true;
+
+        // ✅ flight 내 완료 필드 자동 감지
+        const completeField = Object.keys(f).find((k) => k.startsWith("bool_complete"));
+        const completedValue = f[completeField] ?? 0;
+        const isCompleted = completedValue === 1;
+        const matchCompleted = !completedFilter
+          ? true
+          : completedFilter === "Y"
+          ? isCompleted
+          : !isCompleted;
+
+        const depDate = f.departureDate?.slice(0, 10) ?? "";
+        const targetDate = dateFilter === "today" ? todayStr : tomorrowStr;
+        const matchDate = dateFilter === "all" ? true : depDate === targetDate;
+
+        return matchFlight && matchDest && matchCompleted && matchDate;
+      }),
+    [data, flightFilter, destinationFilter, completedFilter, dateFilter, todayStr, tomorrowStr]
   );
 
   return (
@@ -140,40 +174,30 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false, makeOnly = fa
               <tr key={f.id}>
                 <td>{f.id}</td>
                 <td>{renderCell("flight", f.flight)}</td>
-                {washOnly && ( <td data-label="항공사구분" className="center-align"> {f.airline} </td> )} 
+                {washOnly && <td>{f.flight?.startsWith("OZ") ? "OZ" : "OAL"}</td>}
                 <td>{renderCell("destination", f.destination)}</td>
                 <td>{renderCell("aircraft", f.aircraft)}</td>
-                {washOnly && ( <td data-label="레그넘버" className="center-align"> {f.regNumber} </td> )} 
+                {washOnly && <td>{f.regNumber}</td>}
                 <td>{renderCell("departureDate", f.departureDate)}</td>
+                <td>{renderCell("departureTime", f.departureTime)}</td>
+                <td>{renderCell("startTime", f.startTime)}</td>
+                <td>{f.prepDays ?? -1}</td>
+                <td>{renderCell("endTime", f.endTime)}</td>
+
+                {makeOnly && <td>{f.cart_meal}</td>}
+                {makeOnly && <td>{f.cart_eq}</td>}
+                {makeOnly && <td>{f.cart_glss}</td>}
+                {makeOnly && <td>{f.cart_ey}</td>}
+                {makeOnly && <td>{f.cart_linnen}</td>}
+                {makeOnly && <td>{f.cart_stset}</td>}
+
                 <td className="center-align">
-                  {renderCell("departureTime", f.departureTime)}
-                </td>
-                <td className="center-align">
-                  {renderCell("startTime", f.startTime)}
-                </td>
-                <td className="center-align">{f.prepDays ?? -1}</td>
-                <td className="center-align">{renderCell("endTime", f.endTime)}</td>
-                {makeOnly &&  ( <td data-label="카트 MEAL" className="center-align"> {f.cart_meal} </td>)}
-                {makeOnly &&  ( <td data-label="카트 EQ" className="center-align"> {f.cart_eq} </td>)}
-                {makeOnly &&  ( <td data-label="카트 GLSS" className="center-align"> {f.cart_glss} </td>)}
-                {makeOnly &&  ( <td data-label="카트 EY" className="center-align"> {f.cart_ey} </td>)}
-                {makeOnly &&  ( <td data-label="카트 LINNEN" className="center-align"> {f.cart_linnen} </td>)}
-                {makeOnly &&  ( <td data-label="카트 S/T SET" className="center-align"> {f.cart_stset} </td>)}
-                {/* ✅ bool_complete1 연동 체크박스 */}
-                <td className="center-align">
-                  <input
-                    type="checkbox"
-                    checked={f.bool_complete1 === 1}
-                    onChange={() =>
-                      toggleBoolComplete(f.id, 1, f.bool_complete1)
-                    }
-                  />
+                  <CompleteToggleButton flight={f} toggleBoolComplete={toggleBoolComplete} />
                 </td>
 
                 <td>{renderCell("note", f.note)}</td>
-                {/* ✅ 완료일자/시간 출력 */}
                 <td>{f.completeDate ?? "-"}</td>
-                <td>{f.completeTime ?? "-"}</td>
+                <td>{formatTimeHHMM(f.completeTime)}</td>
               </tr>
             ))}
           </tbody>
