@@ -13,6 +13,11 @@ const AdminLogin = ({ onLogin }) => {
   const redirectPath = searchParams.get('redirect') || '/dashboard';
 
   const handleLogin = async () => {
+    if (!password) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch('http://211.42.159.18:8080/api/admin/login', {
@@ -23,13 +28,15 @@ const AdminLogin = ({ onLogin }) => {
         body: JSON.stringify({ password })
       });
 
-      const isSuccess = await response.json();
+      const result = await response.json();
 
-      if (isSuccess) {
+      if (result.success === true) {
+        // 로그인 성공
         if (onLogin) onLogin();
         navigate(redirectPath, { replace: true });
       } else {
-        alert('비밀번호가 틀렸습니다');
+        // 로그인 실패
+        alert(result.message || '비밀번호가 틀렸습니다.');
       }
     } catch (error) {
       alert('서버 연결 실패 또는 오류 발생');
@@ -44,7 +51,6 @@ const AdminLogin = ({ onLogin }) => {
       <div className="login-wrapper">
         <h2 className="login-title">관리자 로그인</h2>
 
-        {/* ✅ form 태그 추가 + 엔터 지원 */}
         <form
           className="login-box"
           onSubmit={(e) => {
@@ -61,11 +67,12 @@ const AdminLogin = ({ onLogin }) => {
             disabled={loading}
           />
 
-          {/* ✅ password 값이 있으면 active 클래스 추가 */}
           <button
             type="submit"
             className={`login-button ${password ? 'active' : ''}`}
-            disabled={loading}>Log in
+            disabled={loading}
+          >
+            {loading ? '로그인 중...' : 'Log in'}
           </button>
         </form>
       </div>
