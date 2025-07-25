@@ -85,7 +85,7 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false, makeOnly = fa
   );
 
   return (
-    <div className="flight-tablecontainer">
+    <div className="flight-table-container">
       <div className="filter-controls">
         <label>
           비행편명 : 
@@ -146,58 +146,58 @@ const FlightTable = ({ data, toggleBoolComplete, washOnly = false, makeOnly = fa
         <table className="flight-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>비행편명</th>
-              {washOnly && <th>항공사구분</th>}
-              <th>목적지</th>
-              <th>기종</th>
-              {washOnly && <th>레그넘버</th>}
-              <th className="center-align">출발날짜</th>
-              <th className="center-align">출발시간</th>
-              <th className="center-align">작업시작</th>
-              <th className="center-align">준비시간</th>
-              <th className="center-align">작업종료</th>
-              {makeOnly && <th>카트 MEAL</th>}
-              {makeOnly && <th>카트 EQ</th>}
-              {makeOnly && <th>카트 GLSS</th>}
-              {makeOnly && <th>카트 EY</th>}
-              {makeOnly && <th>카트 LINNEN</th>}
-              {makeOnly && <th>카트 S/T SET</th>}
-              <th className="center-align">완료</th>
-              <th>주석</th>
-              <th>완료일자</th>
-              <th>완료시간</th>
+              <th className="col-id">ID</th>
+              <th className="col-flight">비행편명</th>
+              {washOnly && <th className="col-airline">항공사구분</th>}
+              <th className="col-destination">목적지</th>
+              <th className="col-aircraft">기종</th>
+              {washOnly && <th className="col-reg">레그넘버</th>}
+              <th className="col-departure-date">출발날짜</th>
+              <th className="col-departure-time">출발시간</th>
+              <th className="col-start-time">작업시작</th>
+              <th className="col-prep-time">준비시간</th>
+              <th className="col-end-time">작업종료</th>
+              {makeOnly && <th className="col-cart-meal">카트 MEAL</th>}
+              {makeOnly && <th className="col-cart-eq">카트 EQ</th>}
+              {makeOnly && <th className="col-cart-glss">카트 GLSS</th>}
+              {makeOnly && <th className="col-cart-ey">카트 EY</th>}
+              {makeOnly && <th className="col-cart-linnen">카트 LINNEN</th>}
+              {makeOnly && <th className="col-cart-set">카트 S/T SET</th>}
+              <th className="col-completed">완료</th>
+              <th className="col-note">주석</th>
+              <th className="col-completed-date">완료일자</th>
+              <th className="col-completed-time">완료시간</th>
             </tr>
           </thead>
           <tbody>
             {filteredData.map((f) => (
               <tr key={f.id}>
-                <td>{f.id}</td>
-                <td>{renderCell("flight", f.flight)}</td>
-                {washOnly && <td>{f.flight?.startsWith("OZ") ? "OZ" : "OAL"}</td>}
-                <td>{renderCell("destination", f.destination)}</td>
-                <td>{renderCell("aircraft", f.aircraft)}</td>
-                {washOnly && <td>{f.regNumber}</td>}
-                <td>{renderCell("departureDate", f.departureDate)}</td>
-                <td>{renderCell("departureTime", f.departureTime)}</td>
-                <td>{renderCell("startTime", f.startTime)}</td>
-                <td>{f.prepDays ?? -1}</td>
-                <td>{renderCell("endTime", f.endTime)}</td>
+                <td className="col-id" data-label="ID">{f.id}</td>
+                <td className="col-flight" data-label="비행편명">{renderCell("flight", f.flight)}</td>
+                {washOnly && <td className="col-airline" data-label="항공사구분">{f.flight?.startsWith("OZ") ? "OZ" : "OAL"}</td>}
+                <td className="col-destination" data-label="목적지">{renderCell("destination", f.destination)}</td>
+                <td className="col-aircraft" data-label="기종">{renderCell("aircraft", f.aircraft)}</td>
+                {washOnly && <td className="col-reg" data-label="레그넘버">{f.regNumber}</td>}
+                <td className="col-departure-date" data-label="출발날짜">{renderCell("departureDate", f.departureDate)}</td>
+                <td className="col-departure-time" data-label="출발시간">{renderCell("departureTime", f.departureTime)}</td>
+                <td className="col-start-time" data-label="작업시작">{renderCell("startTime", f.startTime)}</td>
+                <td className="col-prep-time" data-label="준비시간">{f.prepDays ?? -1}</td>
+                <td className="col-end-time" data-label="작업종료">{renderCell("endTime", f.endTime)}</td>
 
-                {makeOnly && <td>{f.cart_meal}</td>}
-                {makeOnly && <td>{f.cart_eq}</td>}
-                {makeOnly && <td>{f.cart_glss}</td>}
-                {makeOnly && <td>{f.cart_ey}</td>}
-                {makeOnly && <td>{f.cart_linnen}</td>}
-                {makeOnly && <td>{f.cart_stset}</td>}
+                {makeOnly && <td className="col-cart-meal" data-label="카트 MEAL">{f.cart_meal}</td>}
+                {makeOnly && <td className="col-cart-eq" data-label="카트 EQ">{f.cart_eq}</td>}
+                {makeOnly && <td className="col-cart-glss" data-label="카트 GLSS">{f.cart_glss}</td>}
+                {makeOnly && <td className="col-cart-ey" data-label="카트 EY">{f.cart_ey}</td>}
+                {makeOnly && <td className="col-cart-linnen" data-label="카트 LINNEN">{f.cart_linnen}</td>}
+                {makeOnly && <td className="col-cart-set" data-label="카트 S/T SET">{f.cart_stset}</td>}
 
-                <td className="center-align">
+                <td className="col-completed" data-label="완료">
                   <CompleteToggleButton flight={f} toggleBoolComplete={toggleBoolComplete} />
                 </td>
 
-                <td>{renderCell("note", f.note)}</td>
-                <td>{f.completeDate ?? "-"}</td>
-                <td>{formatTimeHHMM(f.completeTime)}</td>
+                <td className="col-note" data-label="주석">{renderCell("note", f.note)}</td>
+                <td className="col-completed-date" data-label="완료일자">{f.completeDate ?? "-"}</td>
+                <td className="col-completed-time" data-label="완료시간">{formatTimeHHMM(f.completeTime)}</td>
               </tr>
             ))}
           </tbody>
