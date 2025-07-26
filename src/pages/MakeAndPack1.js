@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import FlightTable from "../components/FlightTable";
 import { useMembers } from "../context/MembersContext";
 
@@ -18,22 +18,20 @@ const calcTime = (baseDate, timeStr, offsetHours) => {
   return dateObj;
 };
 
-// ✅ Date → HH:mm:ss
+// ✅ Date → HH:mm
 const formatTime = (dateObj) => {
   if (!dateObj) return "-";
   const h = String(dateObj.getHours()).padStart(2, "0");
   const m = String(dateObj.getMinutes()).padStart(2, "0");
-  const s = String(dateObj.getSeconds()).padStart(2, "0");
-  return `${h}:${m}:${s}`;
+  return `${h}:${m}`;
 };
 
 const MakeAndPack1 = () => {
   const { members, setMembers, loading } = useMembers();
 
-    console.log("DEBUG >> useMembers() in MakeAndPack1:", {
+  console.log(`DEBUG >> useMembers() in MakeAndPack1:`, {
     membersType: typeof members,
     setMembersType: typeof setMembers,
-    setMembersValue: setMembers,
     membersLength: members?.length,
     loading,
   });
@@ -62,18 +60,19 @@ const MakeAndPack1 = () => {
       aircraft: item.acversion ?? "-",
       departureDate: item.departuredate ?? "-",
       departureTime: item.departuretime ?? "-",
-      startTime: startTime,   // ✅ 출발 -6h
-      endTime: endTime,       // ✅ 작업시작 +2h
-      bool_complete1: item.bool_complete1 ?? 0,
+      startTime,
+      endTime,
+      bool_complete1: item.bool_complete1 ?? 0, // ✅ 고정
+      comment: item.comment ?? "",              // ✅ 주석 필드 추가
       completeDate: item.completeDate ?? "-",
-      completeTime: item.completeTime ?? "-"
+      completeTime: item.completeTime ?? "-",
     };
   };
 
   const mappedMembers = members.map(mapToFlightTableData);
 
-  // ✅ 완료 체크 토글 (백엔드에는 bool만 전송)
-  const toggleBoolComplete = async (id, step, currentValue) => {
+  // ✅ 완료 체크 토글 (step=1 고정) + comment 업데이트 지원
+  const toggleBoolComplete = async (id, step = 1, currentValue, comment = "") => {
     const newValue = currentValue === 1 ? 0 : 1;
 
     // UI에만 표시할 완료일자/시간
@@ -81,11 +80,14 @@ const MakeAndPack1 = () => {
     let uiCompleteTime = "-";
     if (newValue === 1) {
       const now = new Date();
-      uiCompleteDate = now.toLocaleDateString("ko-KR", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }).replace(/\.\s*/g, "/").replace(/\/$/, "");
+      uiCompleteDate = now
+        .toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .replace(/\.\s*/g, "/")
+        .replace(/\/$/, "");
       uiCompleteTime = now.toLocaleTimeString("ko-KR", {
         hour: "2-digit",
         minute: "2-digit",
@@ -99,7 +101,10 @@ const MakeAndPack1 = () => {
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ value: newValue }),
+          body: JSON.stringify({ 
+            value: newValue,
+            comment: comment || ""  // ✅ 주석도 같이 업데이트
+          }),
         }
       );
 
@@ -109,34 +114,29 @@ const MakeAndPack1 = () => {
         return;
       }
 
-      console.log(`✅ bool_complete${step} 업데이트 성공 (id=${id}, step=${step}, newValue=${newValue})`);
+      console.log(
+        `✅ bool_complete${step} + comment 업데이트 성공 (id=${id}, step=${step}, newValue=${newValue}, comment=${comment})`
+      );
 
-      if (typeof setMembers !== 'function') {
+      if (typeof setMembers !== "function") {
         console.error("❌ CRITICAL: setMembers is not a function.");
         return;
       }
 
-      // ⭐️ [수정] 상태를 즉시 업데이트하도록 수정
-      setMembers((prev) => {
-        if (!Array.isArray(prev)) {
-          console.error("❌ prev가 배열이 아님:", prev);
-          return prev;
-        }
-
-        const updated = prev.map((m) => {
-          if (Number(m.id) === Number(id)) {
-            return {
-              ...m,
-              [`bool_complete${step}`]: newValue,
-              completeDate: uiCompleteDate,
-              completeTime: uiCompleteTime,
-            };
-          }
-          return m;
-        });
-
-        return updated;
-      });
+      // ✅ 상태 즉시 업데이트
+      setMembers((prev) =>
+        prev.map((m) =>
+          Number(m.id) === Number(id)
+            ? {
+                ...m,
+                [`bool_complete${step}`]: newValue,
+                comment: comment, // ✅ 주석도 UI 반영
+                completeDate: uiCompleteDate,
+                completeTime: uiCompleteTime,
+              }
+            : m
+        )
+      );
     } catch (err) {
       console.error("❌ 네트워크/로직 오류:", err);
     }
@@ -149,7 +149,10 @@ const MakeAndPack1 = () => {
       <h2 style={{ textAlign: "center", margin: "20px 0", fontSize: "24px" }}>
         Make and Pack 1
       </h2>
-      <FlightTable data={mappedMembers} toggleBoolComplete={toggleBoolComplete} />
+      <FlightTable
+        data={mappedMembers}
+        toggleBoolComplete={toggleBoolComplete}
+      />
     </div>
   );
 };
