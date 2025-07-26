@@ -60,30 +60,49 @@
   font-size: 0.85em;
 }
 
+/* ✅ 추가: 서명 컬럼 헤더/셀 스타일 */
+.flight-table th.col-workerSign,
+.flight-table th.col-checkerSign {
+  min-width: 100px;         /* ✅ 최소 너비 확보 */
+  white-space: normal;      /* ✅ 줄바꿈 허용 */
+  word-break: keep-all;     /* ✅ 단어 단위 줄바꿈 */
+  text-align: center;
+}
+
+.flight-table td.col-workerSign,
+.flight-table td.col-checkerSign {
+  min-width: 100px;
+  text-align: center;
+}
+
 @media screen and (min-width: 769px) {
-.flight-table .col-id             { width: 2.5%; text-align: center; }
-.flight-table .col-flight         { width: 4%;   text-align: center; }
-.flight-table .col-airline        { width: 3.5%; text-align: center; }
-.flight-table .col-destination    { width: 3%;   text-align: center; }
-.flight-table .col-aircraft       { width: 4.5%; text-align: center; }
-.flight-table .col-reg            { width: 3.5%; text-align: center; }
-.flight-table .col-departure-date { width: 3.5%; text-align: center; }
-.flight-table .col-departure-time { width: 3.5%; text-align: center; }
-.flight-table .col-start-time     { width: 3.5%; text-align: center; }
-.flight-table .col-prep-time      { width: 3.5%; text-align: center; }
-.flight-table .col-end-time       { width: 4%;   text-align: center; }
+  .flight-table .col-id             { width: 2.5%; text-align: center; }
+  .flight-table .col-flight         { width: 4%;   text-align: center; }
+  .flight-table .col-airline        { width: 3.5%; text-align: center; }
+  .flight-table .col-destination    { width: 3%;   text-align: center; }
+  .flight-table .col-aircraft       { width: 4.5%; text-align: center; }
+  .flight-table .col-reg            { width: 3.5%; text-align: center; }
+  .flight-table .col-departure-date { width: 3.5%; text-align: center; }
+  .flight-table .col-departure-time { width: 3.5%; text-align: center; }
+  .flight-table .col-start-time     { width: 3.5%; text-align: center; }
+  .flight-table .col-prep-time      { width: 3.5%; text-align: center; }
+  .flight-table .col-end-time       { width: 4%;   text-align: center; }
 
-.flight-table .col-cart-meal      { width: 4%;   text-align: center; }
-.flight-table .col-cart-eq        { width: 4%;   text-align: center; }
-.flight-table .col-cart-glss      { width: 4%;   text-align: center; }
-.flight-table .col-cart-ey        { width: 4%;   text-align: center; }
-.flight-table .col-cart-linnen    { width: 5%;   text-align: center; }
-.flight-table .col-cart-set     { width: 5%;   text-align: center; }
+  .flight-table .col-cart-meal      { width: 4%;   text-align: center; }
+  .flight-table .col-cart-eq        { width: 4%;   text-align: center; }
+  .flight-table .col-cart-glss      { width: 4%;   text-align: center; }
+  .flight-table .col-cart-ey        { width: 4%;   text-align: center; }
+  .flight-table .col-cart-linnen    { width: 5%;   text-align: center; }
+  .flight-table .col-cart-set       { width: 5%;   text-align: center; }
 
-.flight-table .col-completed      { width: 4%;   text-align: center; white-space: normal; }
-.flight-table .col-note           { width: 9%;   text-align: center; }
-.flight-table .col-completed-date  { width: 4%;   text-align: center; }
-.flight-table .col-completed-time  { width: 4%;   text-align: center; }
+  .flight-table .col-completed      { width: 4%;   text-align: center; white-space: normal; }
+  .flight-table .col-note           { width: 9%;   text-align: center; }
+  /* ✅ 서명 컬럼은 조금 넓게 */
+  .flight-table .col-workerSign     { width: 8%;   text-align: center; }
+  .flight-table .col-checkerSign    { width: 8%;   text-align: center; }
+
+  .flight-table .col-completed-date { width: 4%;   text-align: center; }
+  .flight-table .col-completed-time { width: 4%;   text-align: center; }
 }
 
 /* --- 반응형 스타일 (모바일/태블릿) --- */
@@ -131,6 +150,23 @@
   }
 
   .flight-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .flight-table .center-align {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .flight-table .center-align::before {
     content: attr(data-label);
     position: absolute;
     left: 10px;
