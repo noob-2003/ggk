@@ -38,10 +38,33 @@ const MakeAndPack2 = () => {
     loading,
   });
 
+  const extractTime = (timeStr) => {
+    if (!timeStr) return null;
+
+    // ISO 형식 (1900-01-01T09:00:00)
+    if (timeStr.includes('T')) {
+      const timePart = timeStr.split('T')[1];
+      const parts = timePart.split(":");
+      if (parts.length >= 2) {
+        return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+      }
+    }
+  
+    // 기존 "HH:mm:ss" 또는 "HH:mm" 형식
+    const parts = timeStr.split(":");
+    if (parts.length >= 2) {
+      return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+    }
+  
+    return null;
+  };
+
   // ✅ 백엔드 데이터 → 화면 표시용 데이터 변환
   const mapToFlightTableData = (item) => {
     const baseDate = new Date(item.departuredate ?? "1970-01-01");
-    const departureTime = item.departuretime ?? null;
+    
+    const rawDepartureTime = item.departuretime ?? null;
+    const departureTime = extractTime(rawDepartureTime);
 
     // ✅ 작업시작 = 출발시간 - 6시간
     const startTimeObj = calcTime(baseDate, departureTime, -6);
@@ -61,12 +84,12 @@ const MakeAndPack2 = () => {
       destination: item.destination ?? "-",
       aircraft: item.acversion ?? "-",
       departureDate: item.departuredate ?? "-",
-      departureTime: item.departuretime ?? "-",
+      departureTime: extractTime(item.departuretime) ?? "-",
       startTime: startTime,   // ✅ 출발 -6h
       endTime: endTime,       // ✅ 작업시작 +2h
       bool_complete1: item.bool_complete1 ?? 0,
       completeDate: item.completeDate ?? "-",
-      completeTime: item.completeTime ?? "-"
+      completeTime: extractTime(item.completeTime) ?? "-"
     };
   };
 

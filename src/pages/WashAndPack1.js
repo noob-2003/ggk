@@ -25,12 +25,35 @@ const WashAndPack1 = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const extractTime = (timeStr) => {
+    if (!timeStr) return null;
+
+    // ISO 형식 (1900-01-01T09:00:00)
+    if (timeStr.includes('T')) {
+      const timePart = timeStr.split('T')[1];
+      const parts = timePart.split(":");
+      if (parts.length >= 2) {
+        return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+      }
+    }
+  
+    // 기존 "HH:mm:ss" 또는 "HH:mm" 형식
+    const parts = timeStr.split(":");
+    if (parts.length >= 2) {
+      return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+    }
+  
+    return null;
+  };
+
   // ✅ 백엔드 데이터 → 화면 표시용 데이터 변환
   const mapToFlightTableData = (item) => {
     const baseDate = new Date(item.departuredate ?? "1970-01-01");
-    const arrivalTime = item.arrivaltime ?? null;
+    
+    const rawDepartureTime = item.departuretime ?? null;
+    const departureTime = extractTime(rawDepartureTime);
 
-    const startTimeObj = calcTime(baseDate, arrivalTime, -8);
+    const startTimeObj = calcTime(baseDate, departureTime, -8);
     const startTime = formatTime(startTimeObj);
 
     let endTime = "-";
@@ -48,13 +71,13 @@ const WashAndPack1 = () => {
       aircraft: item.acversion ?? "-",
       regNumber: item.ac_Reg ?? "-",            // ✅ 레그넘버
       departureDate: item.departuredate ?? "-",
-      departureTime: arrivalTime ?? "-",
+      departureTime: extractTime(item.departureTime) ?? "-",
       startTime,
       prepDays: -1,
       endTime,
       bool_complete7: item.bool_complete7 ?? 0, // ✅ WashAndPack1 전용 완료필드
       completeDate: item.completeDate ?? "-",
-      completeTime: item.completeTime ?? "-",
+      completeTime: extractTime(item.completeTime) ?? "-",
     };
   };
 

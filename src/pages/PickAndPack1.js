@@ -26,12 +26,37 @@ import React, { useEffect, useState } from "react";
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const extractTime = (timeStr) => {
+    if (!timeStr) return null;
+
+    // ISO 형식 (1900-01-01T09:00:00)
+    if (timeStr.includes('T')) {
+      const timePart = timeStr.split('T')[1];
+      const parts = timePart.split(":");
+      if (parts.length >= 2) {
+        return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+      }
+    }
+  
+    // 기존 "HH:mm:ss" 또는 "HH:mm" 형식
+    const parts = timeStr.split(":");
+    if (parts.length >= 2) {
+      return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+    }
+  
+    return null;
+    };
+
     // ✅ 백엔드 데이터 → 화면 표시용 데이터 변환
     const mapToFlightTableData = (item) => {
       const baseDate = new Date(item.departuredate ?? "1970-01-01");
-      const arrivalTime = item.arrivaltime ?? null;
 
-      const startTimeObj = calcTime(baseDate, arrivalTime, -8);
+      //const rawArrivalTime = item.arrivalTime ?? null;
+      //const arrivalTime = extractTime(rawArrivalTime);
+      const rawDepartureTime = item.departuretime ?? null;
+      const departureTime = extractTime(rawDepartureTime);
+
+      const startTimeObj = calcTime(baseDate, departureTime, -6);
       const startTime = formatTime(startTimeObj);
 
       let endTime = "-";
@@ -47,13 +72,13 @@ import React, { useEffect, useState } from "react";
         destination: item.destination ?? "-",
         aircraft: item.acversion ?? "-",
         departureDate: item.departuredate ?? "-",
-        departureTime: arrivalTime ?? "-",
+        departureTime: extractTime(item.departureTime) ?? "-",
         startTime,
         prepDays: -1,
         endTime,
         bool_complete5: item.bool_complete5 ?? 0, // ✅ PickAndPack1은 bool_complete5 고정
         completeDate: item.completeDate ?? "-",
-        completeTime: item.completeTime ?? "-",
+        completeTime: extractTime(item.completeTime) ?? "-",
       };
     };
 
