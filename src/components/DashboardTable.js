@@ -18,6 +18,43 @@ const DashboardTable = ({ data }) => {
     'bool_complete8'
   ];
 
+  const extractTime = (timeStr) => {
+    if (!timeStr) return null;
+
+    // ISO 형식 (1900-01-01T09:00:00)
+    if (timeStr.includes('T')) {
+      const timePart = timeStr.split('T')[1];
+      const parts = timePart.split(":");
+      if (parts.length >= 2) {
+        return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+      }
+    }
+  
+    // 기존 "HH:mm:ss" 또는 "HH:mm" 형식
+    const parts = timeStr.split(":");
+    if (parts.length >= 2) {
+      return `${parts[0].padStart(2,"0")}:${parts[1].padStart(2,"0")}`;
+    }
+  
+    return null;
+  };
+
+  const extractDate = (dateStr) => {
+    if (!dateStr) return "-";
+
+    // ISO 형식 1900-01-01T09:00:00
+    if (dateStr.includes('T')) {
+      return dateStr.split('T')[0];
+    }
+      
+    // 이미 날짜 형식
+    if (dateStr.includes('-')) {
+      return dateStr.slice(0, 10);
+    }
+      
+    return dateStr;
+  };
+
   const getLocalDateStr = (dateObj) => {
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, "0");
@@ -155,8 +192,8 @@ const DashboardTable = ({ data }) => {
                   </td>
 
                   <td data-label="출발일">{item.departuredate}</td>
-                  <td data-label="출발시간">{item.departuretime}</td>
-                  <td data-label="업로드일">{item.uploadDate}</td>
+                  <td data-label="출발시간">{extractTime(item.departuretime)}</td>
+                  <td data-label="업로드일">{extractDate(item.uploadDate)}</td>
                 </tr>
               );
             })}

@@ -75,7 +75,7 @@ const PickAndPack2 = () => {
       destination: item.destination ?? "-",
       aircraft: item.acversion ?? "-",
       departureDate: item.departuredate ?? "-",
-      departureTime: extractTime(item.departureTime) ?? "-",
+      departureTime: extractTime(item.departuretime) ?? "-",
       startTime,           // ✅ 출발시간 -6h
       prepDays: -1,
       endTime,             // ✅ 작업시작 +2h
