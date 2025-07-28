@@ -82,26 +82,26 @@
   .flight-table .col-destination    { width: 3%;   text-align: center; }
   .flight-table .col-aircraft       { width: 4.5%; text-align: center; }
   .flight-table .col-reg            { width: 3.5%; text-align: center; }
-  .flight-table .col-departure-date { width: 3.5%; text-align: center; }
+  .flight-table .col-departure-date { width: 5.5%; text-align: center; }
   .flight-table .col-departure-time { width: 3.5%; text-align: center; }
   .flight-table .col-start-time     { width: 3.5%; text-align: center; }
   .flight-table .col-prep-time      { width: 3.5%; text-align: center; }
   .flight-table .col-end-time       { width: 4%;   text-align: center; }
 
-  .flight-table .col-cart-meal      { width: 4%;   text-align: center; }
-  .flight-table .col-cart-eq        { width: 4%;   text-align: center; }
-  .flight-table .col-cart-glss      { width: 4%;   text-align: center; }
-  .flight-table .col-cart-ey        { width: 4%;   text-align: center; }
-  .flight-table .col-cart-linnen    { width: 5%;   text-align: center; }
-  .flight-table .col-cart-set       { width: 5%;   text-align: center; }
+  .flight-table .col-cart-meal      { width: 3%;   text-align: center; }
+  .flight-table .col-cart-eq        { width: 3%;   text-align: center; }
+  .flight-table .col-cart-glss      { width: 3%;   text-align: center; }
+  .flight-table .col-cart-ey        { width: 3%;   text-align: center; }
+  .flight-table .col-cart-linnen    { width: 3%;   text-align: center; }
+  .flight-table .col-cart-set       { width: 3%;   text-align: center; }
 
   .flight-table .col-completed      { width: 4%;   text-align: center; white-space: normal; }
-  .flight-table .col-note           { width: 9%;   text-align: center; }
+  .flight-table .col-note           { width: 7%;   text-align: center; }
   /* ✅ 서명 컬럼은 조금 넓게 */
-  .flight-table .col-workerSign     { width: 8%;   text-align: center; }
-  .flight-table .col-checkerSign    { width: 8%;   text-align: center; }
+  .flight-table .col-workerSign     { width: 3.4%;  }
+  .flight-table .col-checkerSign    { width: 3.4%;  }
 
-  .flight-table .col-completed-date { width: 4%;   text-align: center; }
+  .flight-table .col-completed-date { width: 8%;   text-align: center; }
   .flight-table .col-completed-time { width: 4%;   text-align: center; }
 }
 
