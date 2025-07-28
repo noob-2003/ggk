@@ -302,7 +302,7 @@ const FlightTable = ({
                   )}
 
                   {extraFields.map((field) => (
-                    <td key={field.key} className={`col-${field.key}`}>
+                    <td key={field.key} className={`col-${field.key}`} data-label={field.label}>
                       <EditableNoteCell
                         value={extraValues[field.key]}
                         onChange={(val) =>
