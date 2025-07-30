@@ -38,14 +38,15 @@ const renderCell = (key, value) => {
 };
 
 // ✅ 완료 버튼 (최신 주석 가져오기 함수로 받기)
-const CompleteToggleButton = ({ flight, toggleBoolComplete, getLatestComment, extraValues }) => {
+const CompleteToggleButton = ({ flight, toggleBoolComplete, getLatestComment, getExtraValues, eyCartValue }) => {
   const completeField = Object.keys(flight).find((k) => k.startsWith("bool_complete"));
   const isCompleted = flight[completeField] === 1;
   const currentValue = flight[completeField] ?? 0;
 
   const handleToggle = () => {
-    const latestComment = getLatestComment(); // ✅ 항상 최신 state 읽기
-    toggleBoolComplete(flight.id, undefined, currentValue, latestComment, extraValues);
+    const latestComment = getLatestComment();
+    const currentExtraValues = getExtraValues();
+    toggleBoolComplete(flight.id, undefined, currentValue, latestComment, currentExtraValues, eyCartValue);
   };
 
   return <input type="checkbox" checked={isCompleted} onChange={handleToggle} />;
@@ -74,7 +75,9 @@ const FlightTable = ({
   washOnly = false,
   makeOnly = false,
   hideNote = false,
-  extraFields = [] 
+  extraFields = [],
+  eyCartValue = () => "",
+  onEyCartChange = () => {}
 }) => {
   const [flightFilter, setFlightFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
@@ -183,7 +186,7 @@ const FlightTable = ({
               {makeOnly && <th className="col-cart-meal">MEAL</th>}
               {makeOnly && <th className="col-cart-eq">EQ</th>}
               {makeOnly && <th className="col-cart-glss">GLSS</th>}
-              {makeOnly && <th className="col-cart-ey">EY</th>}
+              {makeOnly && eyCartValue && onEyCartChange && <th className="col-cart-ey">EY</th>}
               {makeOnly && <th className="col-cart-linnen">LINNEN</th>}
               {makeOnly && <th className="col-cart-set">S/T SET</th>}
               <th className="col-completed">완료</th>
@@ -211,7 +214,6 @@ const FlightTable = ({
                 extraValues.cart_meal = comments[`${f.id}_cart_meal`] ?? f.cart_meal ?? "";
                 extraValues.cart_eq = comments[`${f.id}_cart_eq`] ?? f.cart_eq ?? "";
                 extraValues.cart_glss = comments[`${f.id}_cart_glss`] ?? f.cart_glss ?? "";
-                extraValues.ey_cart = comments[`${f.id}_ey_cart`] ?? f.ey_cart ?? "";
                 extraValues.cart_linnen = comments[`${f.id}_cart_linnen`] ?? f.cart_linnen ?? "";
                 extraValues.cart_st = comments[`${f.id}_cart_st`] ?? f.cart_st ?? "";
               }
@@ -257,13 +259,15 @@ const FlightTable = ({
                       disabled={isCompleted}
                     />
                   </td>
-                  <td className="col-cart-ey">
-                    <EditableNoteCell
-                      value={comments[`${f.id}_ey_cart`] ?? f.ey_cart ?? ""}
-                      onChange={(val) => handleCommentChange(`${f.id}_ey_cart`, val)}
-                      disabled={isCompleted}
-                    />
-                  </td>
+                  {eyCartValue && onEyCartChange && (
+                    <td className="col-cart-ey">
+                      <EditableNoteCell
+                        value={eyCartValue(f.id)}
+                        onChange={(val) => onEyCartChange(f.id, val)}
+                        disabled={isCompleted}
+                      />
+                    </td>
+                  )}
                   <td className="col-cart-linnen">
                     <EditableNoteCell
                       value={comments[`${f.id}_cart_linnen`] ?? f.cart_linnen ?? ""}
@@ -287,7 +291,21 @@ const FlightTable = ({
                       flight={f}
                       getLatestComment={() => comments[f.id] ?? f.comment ?? ""}
                       toggleBoolComplete={toggleBoolComplete}
-                      extraValues={extraValues}
+                      getExtraValues={() => {
+                        const currentExtraValues = {};
+                        extraFields.forEach((field) => {
+                          currentExtraValues[field.key] = comments[`${f.id}_${field.key}`] ?? f[field.key] ?? "";
+                        });
+                        if (makeOnly) {
+                          currentExtraValues.cart_meal = comments[`${f.id}_cart_meal`] ?? f.cart_meal ?? "";
+                          currentExtraValues.cart_eq = comments[`${f.id}_cart_eq`] ?? f.cart_eq ?? "";
+                          currentExtraValues.cart_glss = comments[`${f.id}_cart_glss`] ?? f.cart_glss ?? "";
+                          currentExtraValues.cart_linnen = comments[`${f.id}_cart_linnen`] ?? f.cart_linnen ?? "";
+                          currentExtraValues.cart_st = comments[`${f.id}_cart_st`] ?? f.cart_st ?? "";
+                        }
+                        return currentExtraValues;
+                      }}
+                      eyCartValue={eyCartValue(f.id)}
                     />
                   </td>
 
