@@ -175,6 +175,7 @@ const MakeAndPack3 = () => {
       <FlightTable
         data={mappedMembers}
         toggleBoolComplete={toggleBoolComplete}
+        makeOnly={true}
       />
     </div>
   );

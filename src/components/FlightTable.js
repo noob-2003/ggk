@@ -180,9 +180,9 @@ const FlightTable = ({
               {washOnly && <th className="col-reg">레그넘버</th>}
               <th className="col-departure-date">출발날짜</th>
               <th className="col-departure-time">출발시간</th>
-              <th className="col-start-time">작업시작</th>
-              <th className="col-prep-time">준비시간</th>
-              <th className="col-end-time">작업종료</th>
+              {!makeOnly && <th className="col-start-time">작업시작</th>}
+              {!makeOnly && <th className="col-prep-time">준비시간</th>}
+              {!makeOnly && <th className="col-end-time">작업종료</th>}
               {makeOnly && <th className="col-cart-meal">MEAL</th>}
               {makeOnly && <th className="col-cart-eq">EQ</th>}
               {makeOnly && <th className="col-cart-glss">GLSS</th>}
@@ -232,9 +232,9 @@ const FlightTable = ({
                   {washOnly && <td className="col-reg" data-label="레그넘버">{f.regNumber}</td>}
                   <td className="col-departure-date" data-label="출발날짜">{renderCell("departureDate", f.departureDate)}</td>
                   <td className="col-departure-time" data-label="출발시간">{renderCell("departureTime", f.departureTime)}</td>
-                  <td className="col-start-time" data-label="작업시작">{renderCell("startTime", f.startTime)}</td>
-                  <td className="col-prep-time" data-label="준비시간">{f.prepDays ?? -1}</td>
-                  <td className="col-end-time" data-label="작업종료">{renderCell("endTime", f.endTime)}</td>
+                  {!makeOnly && <td className="col-start-time" data-label="작업시작">{renderCell("startTime", f.startTime)}</td>}
+                  {!makeOnly && <td className="col-prep-time" data-label="준비시간">{f.prepDays ?? -1}</td>}
+                  {!makeOnly && <td className="col-end-time" data-label="작업종료">{renderCell("endTime", f.endTime)}</td>}
 
                   {makeOnly && (
                     <>
