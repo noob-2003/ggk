@@ -4,7 +4,9 @@ import './FileUpload.css';
 function FileUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(""); // 성공 메시지 상태 추가
+  const [successMessage, setSuccessMessage] = useState(""); // ✅ 성공 메시지 상태 추가
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -46,26 +48,51 @@ function FileUpload() {
     setSelectedFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
   };
 
-  const handleUpload = async () => {
-  try {
-    const formData = new FormData();
-    selectedFiles.forEach(file => formData.append("file", file)); // 파일 추가
-
-    const response = await fetch("http://211.42.159.18:8080/api/csv/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (response.ok) {
-      setSuccessMessage("업로드 성공 ✅");
-    } else {
-      setSuccessMessage("업로드 실패 ❌");
+ /* const handleSubmit = (event) => {
+    event.preventDefault();
+    if (selectedFiles.length === 0) {
+      alert("업로드할 파일을 먼저 선택해 주세요.");
+      return;
     }
-  } catch (error) {
-    console.error("업로드 중 오류 발생:", error);
-    setSuccessMessage("서버 오류 ❌");
-  }
-};
+
+    const formData = new FormData();
+    selectedFiles.forEach(file => {
+      formData.append('files', file);
+    });  
+  };*/
+
+  const handleUpload = async () => {
+    if (isUploading) {
+      setUploadMessage("업로드 중입니다!");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadMessage("");
+    try {
+      const formData = new FormData();
+      selectedFiles.forEach(file => formData.append("file", file)); // 파일 추가
+
+      const response = await fetch("http://211.42.159.18:8080/api/csv/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        setSuccessMessage("업로드 성공 ✅");
+        setTimeout(() => {
+          setIsUploading(false);
+        }, 30000); // 30초 딜레이
+      } else {
+        setSuccessMessage("업로드 실패 ❌");
+        setIsUploading(false);
+      }
+    } catch (error) {
+      console.error("업로드 중 오류 발생:", error);
+      setSuccessMessage("서버 오류 ❌");
+      setIsUploading(false);
+    }
+  };
 
 
   return (
@@ -114,9 +141,10 @@ function FileUpload() {
           </div>
         )}
   
-        <button type="button" className="submit-btn" onClick={handleUpload}>
-          Submit
+        <button type="button" className="submit-btn" onClick={handleUpload} disabled={isUploading}>
+          {isUploading ? "업로드 중입니다..." : "Submit"}
         </button>
+        {uploadMessage && <div style={{ marginTop: "10px", color: "red" }}>{uploadMessage}</div>}
       
         {/* 업로드 성공 메시지 표시 */}
         {successMessage && (
