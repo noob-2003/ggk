@@ -1,0 +1,13 @@
+.wash-and-pack-2-container .flight-table .col-workersign2,
+.wash-and-pack-2-container .flight-table .col-checkersign {
+  min-width: 80px;
+}
+
+.wash-and-pack-2-container .flight-table .col-note {
+  width: 5%;
+}
+
+.wash-and-pack-2-container .flight-table th.col-workersign2,
+.wash-and-pack-2-container .flight-table th.col-checkersign {
+  text-align: center;
+}

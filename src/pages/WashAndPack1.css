@@ -1,0 +1,12 @@
+.wash-and-pack-1-container .flight-table .col-comment {
+  width: 8%;
+}
+
+.wash-and-pack-1-container .flight-table .col-signworker1 {
+  width: 5%;
+}
+
+.wash-and-pack-1-container .flight-table th.col-comment,
+.wash-and-pack-1-container .flight-table th.col-signworker1 {
+  text-align: center;
+}

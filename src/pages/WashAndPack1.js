@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FlightTable from "../components/FlightTable";
+import "./WashAndPack1.css";
 
 const calcTime = (baseDate, timeStr, offsetHours) => {
   if (!timeStr) return null;
@@ -21,7 +22,7 @@ const formatTime = (dateObj) => {
   return `${h}:${m}`;
 };
 
-const WashAndPack2 = () => {
+const WashAndPack1 = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -53,7 +54,7 @@ const WashAndPack2 = () => {
     //const arrivalTime = item.arrivaltime ?? null;
     const rawDepartureTime = item.departuretime ?? null;
     const departureTime = extractTime(rawDepartureTime);
-
+    
     const startTimeObj = calcTime(baseDate, departureTime, -6);
     const startTime = formatTime(startTimeObj);
 
@@ -76,16 +77,9 @@ const WashAndPack2 = () => {
       startTime,
       prepDays: -1,
       endTime,
-      bool_complete8: item.bool_complete8 ?? 0, // ✅ WashAndPack2 전용 완료 필드
-      cart_meal : item.cart_meal ?? "-",
-      cart_eq : item.cart_eq ?? "-",
-      cart_glss : item.cart_glss ?? "-",
-      ey_cart : item.ey_Cart ?? "-",
-      cart_linnen : item.cart_linnen ?? "-",
-      cart_st : item.cart_st ?? "-",
-      comment: item.comment8 ?? "",
-      workersign2: item.sign_wkr2 ?? "",       // ✅ 작업자 서명
-      checkersign: item.sign_sprv ?? "", // ✅ 확인자 서명
+      bool_complete7: item.bool_complete7 ?? 0, // ✅ WashAndPack1 전용 완료필드
+      signworker1 : item.sign_wkr1 ?? "", // ✅ 작업자 서명
+      comment: item.comment7 ?? "",
       completeDate: item.completeDate ?? "-",
       completeTime: extractTime(item.completeTime) ?? "-",
     };
@@ -107,31 +101,35 @@ const WashAndPack2 = () => {
     fetchData();
   }, []);
 
-  // ✅ 완료 체크 토글 → step=8 고정
- const toggleBoolComplete = async (id, step = 8, currentValue, latestComment = "", extraValues = {}) => {
-  const newValue = currentValue === 1 ? 0 : 1;
+  // ✅ 완료 체크 토글 → step=7 고정
+    const toggleBoolComplete = async (id, step = 7, currentValue, latestComment = "", extraValues = {}) => {
+       const newValue = currentValue === 1 ? 0 : 1;
 
-  let uiCompleteDate = "-";
-  let uiCompleteTime = "-";
-  if (newValue === 1) {
-    const now = new Date();
-    uiCompleteDate = now.toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" })
-                        .replace(/\.\s*/g, "/").replace(/\/$/, "");
-    uiCompleteTime = now.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", hour12: false });
-  }
+    // ✅ UI 업데이트용 완료일자/시간
+    let uiCompleteDate = "-";
+    let uiCompleteTime = "-";
+    if (newValue === 1) {
+      const now = new Date();
+      uiCompleteDate = now
+        .toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .replace(/\.\s*/g, "/")
+        .replace(/\/$/, "");
+      uiCompleteTime = now.toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    }
 
-  try {
+    try {
     const bodyData = {
       value: newValue,
-      comment: latestComment,
-      sign_wkr2: extraValues.workersign2,
-      sign_sprv: extraValues.checkersign,
-      cart_meal: Number(extraValues.cart_meal) || 0,
-      cart_eq: Number(extraValues.cart_eq) || 0,
-      cart_glss: Number(extraValues.cart_glss) || 0,
-      ey_cart: Number(extraValues.ey_cart) || 0,
-      cart_linnen: Number(extraValues.cart_linnen) || 0,
-      cart_st: Number(extraValues.cart_st) || 0,
+      comment: latestComment,            // ✅ 주석 전송
+      sign_wkr1: extraValues.signworker1, // ✅ 작업자 서명 전송
     };
 
     const res = await fetch(`http://211.42.159.18:8080/api/members/${id}/complete/${step}`, {
@@ -145,7 +143,7 @@ const WashAndPack2 = () => {
       return;
     }
 
-    console.log(`✅ bool_complete${step} + 주석/카트/서명 업데이트 완료`);
+    console.log(`✅ bool_complete${step} + 주석/서명 업데이트 완료`);
 
     setData((prev) =>
       prev.map((m) =>
@@ -154,9 +152,9 @@ const WashAndPack2 = () => {
               ...m,
               [`bool_complete${step}`]: newValue,
               comment: latestComment,
+              signworker1: extraValues.workerSign,
               completeDate: uiCompleteDate,
               completeTime: uiCompleteTime,
-              ...extraValues,
             }
           : m
       )
@@ -165,22 +163,21 @@ const WashAndPack2 = () => {
     console.error("❌ 네트워크 오류:", err);
   }
 };
+
   if (loading) return <div>데이터 불러오는 중...</div>;
 
   return (
-    <div>
+    <div className="wash-and-pack-1-container">
       <h2 style={{ textAlign: "center", margin: "20px 0", fontSize: "24px" }}>
-        Wash and Pack 2
+        Wash and Pack 1
       </h2>
       <FlightTable
         data={data}
         toggleBoolComplete={toggleBoolComplete}
-        washOnly={true}   // ✅ Wash 전용 UI
-        makeOnly={true}   // ✅ 추가 UI가 필요하면 유지
-        extraFields={[{ key: "workersign2", label: "작업자 서명"  },  { key: "checkersign", label: "확인자 서명" }
-          ]}
-        // 작업자 서명
-        // 확인자 서명
+        washOnly={true} // ✅ Wash 전용 UI 표시
+        extraFields={[
+          { key: "signworker1", label: "서명" },
+        ]}
       />
     </div>
   );
