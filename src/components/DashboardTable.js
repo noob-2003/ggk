@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './DashboardTable.css';
 
 const DashboardTable = ({ data }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
-  const [dateFilter, setDateFilter] = useState("today");
+  const [startDate, setStartDate] = useState(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    return tomorrow;
+  });
 
   // ✅ 작업 키 정의
   const completeKeys = [
@@ -55,20 +67,6 @@ const DashboardTable = ({ data }) => {
     return dateStr;
   };
   
-  const getLocalDateStr = (dateObj) => {
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
-  const today = new Date();
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
-
-  const todayStr = getLocalDateStr(today);
-  const tomorrowStr = getLocalDateStr(tomorrow);
-  
   // ✅ 사용자에게 보여줄 라벨 매핑
   const completeKeyLabels = {
     bool_complete1: "MNP1",
@@ -97,21 +95,30 @@ const DashboardTable = ({ data }) => {
   const filteredData = data
     .filter((item) => {
       const flightMatch = (item.flightNumber ?? "").toLowerCase().includes(searchTerm.toLowerCase());
-      const status = getOverrallStatus(item); // ✅ item.tasks 제거
+      const status = getOverrallStatus(item);
       const statusMatch =
         statusFilter === 'all' ||
         (statusFilter === '완료' && status === '완료') ||
         (statusFilter === '미완료' && status === '미완료');
       
-      const depDate = item.departuredate?.slice(0, 10) ?? "";
-      const matchDate =
-        dateFilter === "all"
-          ? true
-          : dateFilter === "today"
-          ? depDate === todayStr
-          : depDate === tomorrowStr;
+      const depDateStr = item.departuredate?.slice(0, 10);
 
-      return flightMatch && statusMatch && matchDate;
+      let dateMatch = true;
+
+      if (startDate || endDate) {
+        if (!depDateStr) {
+          dateMatch = false;
+        } else {
+          const depDate = new Date(depDateStr);
+          depDate.setHours(0, 0, 0, 0);
+
+          const startMatch = startDate ? depDate >= startDate : true;
+          const endMatch = endDate ? depDate <= endDate : true;
+          dateMatch = startMatch && endMatch;
+        }
+      }
+
+      return flightMatch && statusMatch && dateMatch;
     })
     .sort((a, b) => {
       if (!sortConfig.key) return 0;
@@ -139,11 +146,25 @@ const DashboardTable = ({ data }) => {
           <option value="완료">완료</option>
           <option value="미완료">미완료</option>
         </select>
-        <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}>
-          <option value="all">전체</option>
-          <option value="today">오늘</option>
-          <option value="tomorrow">내일</option>
-        </select>
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          dateFormat="yyyy-MM-dd"
+          placeholderText="출발일 (시작)"
+        />
+        <DatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          dateFormat="yyyy-MM-dd"
+          placeholderText="출발일 (종료)"
+        />
       </div>
 
       {/* ✅ 테이블 */}
